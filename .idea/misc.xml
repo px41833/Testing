@@ -5,7 +5,7 @@
     <option name="formatter" value="ECLIPSE" />
     <option name="id" value="1451552422840" />
     <option name="name" value="default" />
-    <option name="pathToConfigFileJava" value="$USER_HOME$/Downloads/gexin-standard-master-50f2f7df1e801a493a22d7cad67ed37cade4fdb5/代码风格/eclipse_formatter/eclipse-java-google-style.xml" />
+    <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../Git/gexin-standard/codestyle/eclipse_formatter/eclipse-java-google-style.xml" />
     <option name="selectedJavaProfile" value="GoogleStyle" />
   </component>
   <component name="EntryPointsManager">
