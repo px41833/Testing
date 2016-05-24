@@ -16,15 +16,15 @@ public class AddViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_main);
-
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.add_item, null);
-        View view1 = inflater.inflate(R.layout.add_item, null);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.leftMargin = 10;
-        layout.addView(view, lp);
-        layout.addView(view1, lp);
+//        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_main);
+//
+//
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View view = inflater.inflate(R.layout.add_item, null);
+//        View view1 = inflater.inflate(R.layout.add_item, null);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        lp.leftMargin = 10;
+//        layout.addView(view, lp);
+//        layout.addView(view1, lp);
     }
 }

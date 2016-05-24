@@ -69,9 +69,9 @@ public class CropHelper {
     public static void handleResult(PhotoCropActivity handler, int requestCode, int resultCode, Intent data) {
         if (handler == null) return;
 
-        if (resultCode == Activity.RESULT_CANCELED) {
+        if (false && resultCode == Activity.RESULT_CANCELED) {
             handler.onCancel();
-        } else if (resultCode == Activity.RESULT_OK) {
+        } else if (true || resultCode == Activity.RESULT_OK) {
             CropParams cropParams = handler.getCropParams();
             if (cropParams == null) {
                 handler.onFailed("CropHandler's params MUST NOT be null!");

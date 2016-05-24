@@ -17,6 +17,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -68,10 +69,18 @@ public class MapActivity extends Activity {
         setContentView(R.layout.activity_map);
         mapView = (MapView) findViewById(R.id.bmapview);
         mBaiduMap = mapView.getMap();
-        mLocationClient = new LocationClient(getApplicationContext());
-        mLocationClient.registerLocationListener(myListener); // 注册监听函数
-        initLocation();
-        mLocationClient.start();
+//        mLocationClient = new LocationClient(getApplicationContext());
+//        mLocationClient.registerLocationListener(myListener); // 注册监听函数
+//        initLocation();
+//        mLocationClient.start();
+
+         LatLngBounds.Builder builder = new LatLngBounds.Builder().include(new
+         LatLng(40.00871886580188, 116.41943288642729))
+         .include(new LatLng(39.871538358857315, 116.43841408185313))
+         .include(new LatLng(40.015944300000065, 116.47337613230147))
+         .include(new LatLng(39.80358557934692, 116.51732123784959))
+         .include(new LatLng(39.96100198723921, 116.36827438763405));
+        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngBounds(builder.build()));
 
         mPoiSearch = PoiSearch.newInstance();
 
