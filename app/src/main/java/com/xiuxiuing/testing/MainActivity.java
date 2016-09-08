@@ -5,10 +5,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.List;
 
 import android.content.Context;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -29,7 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.xiuxiuing.testing.Adapter.MainRecyclerAdapter;
+import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {
     TextView hello = null;
@@ -242,21 +240,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String getWifiList(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        // if (wifiManager.isWifiEnabled()) {
-        wifiManager.setWifiEnabled(true);
-        List<ScanResult> list = wifiManager.getScanResults();
-        if (list != null) {
-            StringBuilder sb = new StringBuilder();
-            for (ScanResult result : list) {
-                sb.append(result.SSID + " " + result.BSSID + " " + result.level + "\n");
-            }
-            return sb.toString();
-        }
-        // }
-        return "";
-    }
+
 
     public class MyThread implements Runnable {
         @Override

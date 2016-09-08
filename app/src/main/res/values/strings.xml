@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">Testing</string>
     <string name="action_settings">Settings</string>
+
+    <string name="title_wifi_manager">Wifi信息管理</string>
+    <string name="desc_wifi_manager">获取WiFi相关信息,WiFi操作等</string>
+
+    <string name="title_wifi_share">Wifi共享SDK</string>
+    <string name="desc_wifi_share">一键WiFiSDK使用</string>
+
+    <string name="title_android_location">系统定位</string>
+    <string name="desc_android_location">使用系统API获取定位信息</string>
+
+    <string name="title_android_webview">WebView使用</string>
+    <string name="desc_android_webview">WebView使用详情</string>
+
+    <string name="title_android_openappstore">跳转应用市场</string>
+    <string name="desc_android_openappstore">跳转应用市场</string>
+
+    <string name="title_android_phoneinfo">手机信息</string>
+    <string name="desc_android_phoneinfo">获取手机各种硬件标识,系统版本等</string>
 </resources>

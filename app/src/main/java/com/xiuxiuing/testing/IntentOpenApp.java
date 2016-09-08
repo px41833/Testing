@@ -1,6 +1,5 @@
 package com.xiuxiuing.testing;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -11,27 +10,25 @@ import android.util.Log;
 /**
  * Created by wang on 16/5/6.
  */
-public class IntentOpenApp extends Activity {
+public class IntentOpenApp extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // goToSamsungappsMarket(this, "com.UCMobile");
-        // goToMarket(this, "com.UCMobile");
+        goToMarket(this, "com.UCMobile");
         // goToLeTVStore(this, "com.UCMobile");
-        goToLeTVStoreDetail(this, "com.sina.weibo");
+        // goToLeTVStoreDetail(this, "com.sina.weibo");
+//        goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
     }
 
 
     public static void goToMarket(Context context, String packageName) {
         Uri uri = Uri.parse("market://details?id=" + packageName);
-        // "com.letv.mobile.appstore.search"
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
-            System.out.println(goToMarket.getData().toString());
-            System.out.println(goToMarket.getClass().toString());
-            Log.e("getdata", goToMarket.toURI().toString());
+            goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
             context.startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
@@ -43,7 +40,6 @@ public class IntentOpenApp extends Activity {
         Intent goToMarket = new Intent();
         goToMarket.setClassName("com.sec.android.app.samsungapps", "com.sec.android.app.samsungapps.Main");
         goToMarket.setData(uri);
-
         try {
             context.startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
