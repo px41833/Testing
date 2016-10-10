@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.xiuxiuing.testing.R;
 
 /**
  * Created by wang on 16/5/12.

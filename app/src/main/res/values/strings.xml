@@ -19,4 +19,7 @@
 
     <string name="title_android_phoneinfo">手机信息</string>
     <string name="desc_android_phoneinfo">获取手机各种硬件标识,系统版本等</string>
+
+    <string name="title_android_customview">自定义View</string>
+    <string name="desc_android_customview">自定义View用法</string>
 </resources>

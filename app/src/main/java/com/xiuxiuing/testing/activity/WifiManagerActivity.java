@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.xiuxiuing.testing.R;
 
 /**
  * Created by wang on 16/5/30.
@@ -102,7 +103,7 @@ public class WifiManagerActivity extends BaseActivity {
 
         tvHello.setText(getLocalMac(this));
 
-        wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wm = (WifiManager) getSystemService(WIFI_SERVICE);
         wifiReceiver = new WifiReceiver();
         IntentFilter filter = new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         registerReceiver(wifiReceiver, filter);
@@ -114,7 +115,7 @@ public class WifiManagerActivity extends BaseActivity {
 
     public static String getImei(Context context) {
         try {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
             return telephonyManager.getDeviceId();
         } catch (Throwable t) {
             // LogPrinter.d(TAG, t.toString());
@@ -123,7 +124,7 @@ public class WifiManagerActivity extends BaseActivity {
     }
 
     public String getWifiList(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
         // if (wifiManager.isWifiEnabled()) {
         // wifiManager.setWifiEnabled(true);
         List<ScanResult> list = wifiManager.getScanResults();
@@ -140,13 +141,13 @@ public class WifiManagerActivity extends BaseActivity {
     }
 
     public String getLocalMac(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
         WifiInfo info = wifiManager.getConnectionInfo();
         return info.getMacAddress();
     }
 
     public String getConfiguration(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
         // if (wifiManager.isWifiEnabled()) {
         // wifiManager.setWifiEnabled(true);
         List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();

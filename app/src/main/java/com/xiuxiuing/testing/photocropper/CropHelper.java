@@ -8,7 +8,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.xiuxiuing.testing.PhotoCropActivity;
+import com.xiuxiuing.testing.activity.PhotoCropActivity;
 
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.photocropper.BitmapUtil;
 import com.xiuxiuing.testing.photocropper.CropHandler;
 import com.xiuxiuing.testing.photocropper.CropHelper;

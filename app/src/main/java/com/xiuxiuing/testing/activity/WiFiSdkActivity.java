@@ -1,21 +1,22 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.service.WifiService;
+import com.xiuxiuing.testing.utils.PasswordGetter;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -23,7 +24,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -33,8 +33,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.xiuxiuing.testing.utils.PasswordGetter;
 
 /**
  * Created by wang on 16/6/7.
@@ -64,30 +62,34 @@ public class WiFiSdkActivity extends BaseActivity {
         setContentView(R.layout.activity_wifisdk);
         listView = (ListView) findViewById(R.id.lv_wifisdk);
         requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wm = (WifiManager) getSystemService(WIFI_SERVICE);
         wm.startScan();
         System.out.println("init ");
-        wifiReceiver = new WifiReceiver();
 
-        ContentResolver resolver = getContentResolver();
-        try {
+        Intent intent = new Intent(this, WifiService.class);
+        startService(intent);
+        //
+        // wifiReceiver = new WifiReceiver();
+        //
+        // ContentResolver resolver = getContentResolver();
+//        try {
+//
+//            int value = Settings.System.getInt(resolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+//            int i = Settings.System.getInt(resolver, Settings.System.WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED, 0);
+//            int q = Settings.System.getInt(resolver, Settings.System.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, 0);
+//            int w = Settings.System.getInt(resolver, "wifi_scan_always_enabled", 0);
+//
+//
+//            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+//            Settings.Global.putInt(resolver, "wifi_scan_always_enabled", 1);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-            int value = Settings.System.getInt(resolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-            int i = Settings.System.getInt(resolver, Settings.System.WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED, 0);
-            int q = Settings.System.getInt(resolver, Settings.System.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, 0);
-            int w = Settings.System.getInt(resolver, "wifi_scan_always_enabled", 0);
-
-
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-            Settings.Global.putInt(resolver, "wifi_scan_always_enabled", 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        registerReceiver(wifiReceiver, filter);
+        // IntentFilter filter = new IntentFilter();
+        // filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        // filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        // registerReceiver(wifiReceiver, filter);
 
 
 
@@ -100,9 +102,9 @@ public class WiFiSdkActivity extends BaseActivity {
         // // wm.setWifiEnabled(true);
         // // }
         //
-        listResults = wm.getScanResults();
-        adapter = new MyAdapter(this, listResults);
-        listView.setAdapter(adapter);
+//        listResults = wm.getScanResults();
+//        adapter = new MyAdapter(this, listResults);
+//        listView.setAdapter(adapter);
         //
         // try {
         // passwordGetter = new PasswordGetter(this.getAssets().open("password.txt"));
@@ -132,7 +134,7 @@ public class WiFiSdkActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(wifiReceiver);
+        // unregisterReceiver(wifiReceiver);
         super.onDestroy();
     }
 

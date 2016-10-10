@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -22,12 +22,12 @@ import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.overlayutil.PoiOverlay;
 
 import java.util.List;

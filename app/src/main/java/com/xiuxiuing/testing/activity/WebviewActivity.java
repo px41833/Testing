@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import java.lang.reflect.Field;
 
@@ -10,6 +10,8 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ZoomButtonsController;
+
+import com.xiuxiuing.testing.R;
 
 /**
  * Created by wang on 16/7/14.

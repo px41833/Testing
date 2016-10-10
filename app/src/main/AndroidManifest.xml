@@ -47,7 +47,7 @@
             android:process=":remote"></service>
 
         <activity
-            android:name="com.xiuxiuing.testing.MainActivity"
+            android:name=".activity.PhoneInfoActivity"
             android:label="@string/app_name"
             >
             <intent-filter>
@@ -56,13 +56,16 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".BaseActivity"/>
-        <activity android:name=".WifiManagerActivity"/>
-        <activity android:name=".WiFiSdkActivity"/>
-        <activity android:name=".LocationActivity"/>
-        <activity android:name=".WebviewActivity"/>
-        <activity android:name=".PhoneInfoActivity"/>
-        <activity android:name=".IntentOpenApp"/>
+        <activity android:name=".activity.BaseActivity"/>
+        <activity android:name=".activity.WifiManagerActivity"/>
+        <activity android:name=".activity.WiFiSdkActivity"/>
+        <activity android:name=".activity.LocationActivity"/>
+        <activity android:name=".activity.WebviewActivity"/>
+        <!--<activity android:name=".activity.PhoneInfoActivity"/>-->
+        <activity android:name=".activity.IntentOpenApp"/>
+        <activity android:name=".activity.CustomViewActivity"/>
+
+        <service android:name=".service.WifiService"/>
 
         <receiver android:name="com.xiuxiuing.testing.receiver.StaticReceiver">
             <intent-filter>

@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {

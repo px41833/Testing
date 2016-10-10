@@ -1,4 +1,4 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import com.xiuxiuing.testing.R;
 
 /**
  * Created by wang on 16/5/31.

@@ -1,11 +1,12 @@
-package com.xiuxiuing.testing;
+package com.xiuxiuing.testing.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+
+import com.xiuxiuing.testing.R;
 
 /**
  * Created by wang on 16/5/6.

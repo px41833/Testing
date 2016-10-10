@@ -1,5 +1,14 @@
 package com.xiuxiuing.testing.adapter;
 
+import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.activity.CustomViewActivity;
+import com.xiuxiuing.testing.activity.IntentOpenApp;
+import com.xiuxiuing.testing.activity.LocationActivity;
+import com.xiuxiuing.testing.activity.PhoneInfoActivity;
+import com.xiuxiuing.testing.activity.WebviewActivity;
+import com.xiuxiuing.testing.activity.WiFiSdkActivity;
+import com.xiuxiuing.testing.activity.WifiManagerActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.xiuxiuing.testing.IntentOpenApp;
-import com.xiuxiuing.testing.LocationActivity;
-import com.xiuxiuing.testing.PhoneInfoActivity;
-import com.xiuxiuing.testing.R;
-import com.xiuxiuing.testing.WebviewActivity;
-import com.xiuxiuing.testing.WiFiSdkActivity;
-import com.xiuxiuing.testing.WifiManagerActivity;
-
 /**
  * Created by wang on 16/5/23.
  */
@@ -27,7 +28,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             new ItemInfo(R.string.title_android_location, R.string.desc_android_location, LocationActivity.class),
             new ItemInfo(R.string.title_android_webview, R.string.desc_android_webview, WebviewActivity.class),
             new ItemInfo(R.string.title_android_openappstore, R.string.desc_android_openappstore, IntentOpenApp.class),
-            new ItemInfo(R.string.title_android_phoneinfo, R.string.desc_android_phoneinfo, PhoneInfoActivity.class)};
+            new ItemInfo(R.string.title_android_phoneinfo, R.string.desc_android_phoneinfo, PhoneInfoActivity.class),
+            new ItemInfo(R.string.title_android_customview, R.string.desc_android_customview, CustomViewActivity.class)};
 
     private Context mContext;
 
