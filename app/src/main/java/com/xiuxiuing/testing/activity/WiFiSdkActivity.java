@@ -1,6 +1,11 @@
 package com.xiuxiuing.testing.activity;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,11 +14,11 @@ import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.service.WifiService;
 import com.xiuxiuing.testing.utils.PasswordGetter;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,15 +29,19 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by wang on 16/6/7.
@@ -50,6 +59,10 @@ public class WiFiSdkActivity extends BaseActivity {
     ListView listView;
     MyAdapter adapter;
 
+    EditText etIp;
+    EditText etGetway;
+    EditText etDns;
+
     List<ScanResult> listResults;
     String mSsid;
     String password;
@@ -60,31 +73,45 @@ public class WiFiSdkActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifisdk);
+        etIp = (EditText) findViewById(R.id.et_ip);
+        etGetway = (EditText) findViewById(R.id.et_getway);
+        etDns = (EditText) findViewById(R.id.et_dns);
         listView = (ListView) findViewById(R.id.lv_wifisdk);
-        requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         wm = (WifiManager) getSystemService(WIFI_SERVICE);
         wm.startScan();
         System.out.println("init ");
 
         Intent intent = new Intent(this, WifiService.class);
         startService(intent);
+
+        Field[] fields = WifiConfiguration.class.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Log.i("fields:", fields[i].getName());
+        }
+
+
+
         //
         // wifiReceiver = new WifiReceiver();
         //
         // ContentResolver resolver = getContentResolver();
-//        try {
-//
-//            int value = Settings.System.getInt(resolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-//            int i = Settings.System.getInt(resolver, Settings.System.WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED, 0);
-//            int q = Settings.System.getInt(resolver, Settings.System.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, 0);
-//            int w = Settings.System.getInt(resolver, "wifi_scan_always_enabled", 0);
-//
-//
-//            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-//            Settings.Global.putInt(resolver, "wifi_scan_always_enabled", 1);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        // try {
+        //
+        // int value = Settings.System.getInt(resolver, Settings.System.WIFI_SLEEP_POLICY,
+        // Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        // int i = Settings.System.getInt(resolver,
+        // Settings.System.WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED, 0);
+        // int q = Settings.System.getInt(resolver,
+        // Settings.System.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, 0);
+        // int w = Settings.System.getInt(resolver, "wifi_scan_always_enabled", 0);
+        //
+        //
+        // SharedPreferences.Editor editor =
+        // PreferenceManager.getDefaultSharedPreferences(this).edit();
+        // Settings.Global.putInt(resolver, "wifi_scan_always_enabled", 1);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
 
         // IntentFilter filter = new IntentFilter();
         // filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
@@ -102,9 +129,17 @@ public class WiFiSdkActivity extends BaseActivity {
         // // wm.setWifiEnabled(true);
         // // }
         //
-//        listResults = wm.getScanResults();
-//        adapter = new MyAdapter(this, listResults);
-//        listView.setAdapter(adapter);
+        listResults = wm.getScanResults();
+        adapter = new MyAdapter(this, listResults);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ScanResult sr = listResults.get(position);
+                connectNetwork(wm, sr.SSID, null);
+            }
+        });
         //
         // try {
         // passwordGetter = new PasswordGetter(this.getAssets().open("password.txt"));
@@ -138,6 +173,113 @@ public class WiFiSdkActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    private void setIpWithTfiStaticIp(WifiConfiguration wifiConfig) {
+
+        if (android.os.Build.VERSION.SDK_INT < 11) { // 如果是android2.x版本的话
+
+            ContentResolver ctRes = getContentResolver();
+            Settings.System.putInt(ctRes, Settings.System.WIFI_USE_STATIC_IP, 1);
+            Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_IP, etIp.getText().toString());
+            Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_NETMASK, "255.255.255.0");
+            Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_GATEWAY, etGetway.getText().toString());
+            Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_DNS1, etDns.getText().toString());
+            // Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_DNS2, "61.134.1.9");
+
+        } else { // 如果是android3.x版本及以上的话
+            try {
+                setIpAssignment("STATIC", wifiConfig);
+                setIpAddress(InetAddress.getByName(etIp.getText().toString()), 24, wifiConfig);
+                setGateway(InetAddress.getByName(etGetway.getText().toString()), wifiConfig);
+                setDNS(InetAddress.getByName(etDns.getText().toString()), wifiConfig);
+                wm.updateNetwork(wifiConfig); // apply the setting
+                System.out.println("静态ip设置成功！");
+                Toast.makeText(this, "静态ip设置成功", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("静态ip设置失败！");
+                Toast.makeText(this, "静态ip设置失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private static void setIpAssignment(String assign, WifiConfiguration wifiConf)
+            throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
+        setEnumField(wifiConf, assign, "ipAssignment");
+    }
+
+    private static void setIpAddress(InetAddress addr, int prefixLength, WifiConfiguration wifiConf)
+            throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, InvocationTargetException {
+        Object linkProperties = getField(wifiConf, "linkProperties");
+        if (linkProperties == null)
+            return;
+        Class<?> laClass = Class.forName("android.net.LinkAddress");
+        Constructor<?> laConstructor = laClass.getConstructor(new Class[] {InetAddress.class, int.class});
+        Object linkAddress = laConstructor.newInstance(addr, prefixLength);
+
+        ArrayList<Object> mLinkAddresses = (ArrayList<Object>) getDeclaredField(linkProperties, "mLinkAddresses");
+        mLinkAddresses.clear();
+        mLinkAddresses.add(linkAddress);
+    }
+
+    private static void setGateway(InetAddress gateway, WifiConfiguration wifiConf)
+            throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException, ClassNotFoundException,
+            NoSuchMethodException, InstantiationException, InvocationTargetException {
+        Object linkProperties = getField(wifiConf, "linkProperties");
+        if (linkProperties == null)
+            return;
+
+        if (android.os.Build.VERSION.SDK_INT >= 14) { // android4.x版本
+            Class<?> routeInfoClass = Class.forName("android.net.RouteInfo");
+            Constructor<?> routeInfoConstructor = routeInfoClass.getConstructor(new Class[] {InetAddress.class});
+            Object routeInfo = routeInfoConstructor.newInstance(gateway);
+
+            ArrayList<Object> mRoutes = (ArrayList<Object>) getDeclaredField(linkProperties, "mRoutes");
+            mRoutes.clear();
+            mRoutes.add(routeInfo);
+        } else { // android3.x版本
+            ArrayList<InetAddress> mGateways = (ArrayList<InetAddress>) getDeclaredField(linkProperties, "mGateways");
+            mGateways.clear();
+            mGateways.add(gateway);
+        }
+
+    }
+
+    private static Object getField(Object obj, String name)
+            throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field f = obj.getClass().getField(name);
+        Object out = f.get(obj);
+        return out;
+    }
+
+    private static Object getDeclaredField(Object obj, String name)
+            throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field f = obj.getClass().getDeclaredField(name);
+        f.setAccessible(true);
+        Object out = f.get(obj);
+        return out;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void setEnumField(Object obj, String value, String name)
+            throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field f = obj.getClass().getField(name);
+        f.set(obj, Enum.valueOf((Class<Enum>) f.getType(), value));
+    }
+
+    private static void setDNS(InetAddress dns, WifiConfiguration wifiConf)
+            throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
+        Object linkProperties = getField(wifiConf, "linkProperties");
+        if (linkProperties == null)
+            return;
+        ArrayList<InetAddress> mDnses = (ArrayList<InetAddress>) getDeclaredField(linkProperties, "mDnses");
+        mDnses.clear();
+        // 清除原有DNS设置（如果只想增加，不想清除，词句可省略）
+        mDnses.add(dns);
+        // 增加新的DNS
+    }
+
     private void deleteSavedConfigs(WifiManager wm) {
         System.out.println("deleteSavedConfigs");
         WifiConfiguration config;
@@ -153,29 +295,22 @@ public class WiFiSdkActivity extends BaseActivity {
     private void connectNetwork(WifiManager wm, String ssid, String password) {
         System.out.println("connectNetwork");
         WifiConfiguration wc = new WifiConfiguration();
-        // wc.SSID = "\"CYWiFi-B22A\"";
-        // wc.preSharedKey = "\"1234567890\"";
-
-        ssid = "\"" + ssid + "\"";
-        wc.SSID = ssid;
+        wc.SSID = "\"" + ssid + "\"";
         System.out.println("ssid:" + ssid);
-        wc.preSharedKey = password;
-        wc.hiddenSSID = true;
-
-        wc.status = WifiConfiguration.Status.ENABLED;
-
-        wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-
-        wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-
-        wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-
-        wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-
-        wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-
-        wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-
+        if (password != null) {
+            wc.preSharedKey = password;
+            wc.hiddenSSID = true;
+            wc.status = WifiConfiguration.Status.ENABLED;
+            wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+            wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+            wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+            wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        } else {
+            wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        }
+        setIpWithTfiStaticIp(wc);
         int res = wm.addNetwork(wc);
         Method connMethod = connectWifiByReflectMethod(res);
         if (connMethod != null) {

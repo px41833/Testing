@@ -22,4 +22,7 @@
 
     <string name="title_android_customview">自定义View</string>
     <string name="desc_android_customview">自定义View用法</string>
+
+    <string name="title_android_appinfo">AppInfo</string>
+    <string name="desc_android_appinfo">App相关信息</string>
 </resources>
