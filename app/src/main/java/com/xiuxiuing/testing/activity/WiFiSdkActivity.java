@@ -10,18 +10,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.service.WifiService;
 import com.xiuxiuing.testing.utils.PasswordGetter;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -29,7 +32,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -67,6 +69,11 @@ public class WiFiSdkActivity extends BaseActivity {
     String mSsid;
     String password;
     boolean cracking;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API. See
+     * https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -88,7 +95,6 @@ public class WiFiSdkActivity extends BaseActivity {
         for (int i = 0; i < fields.length; i++) {
             Log.i("fields:", fields[i].getName());
         }
-
 
 
         //
@@ -117,7 +123,6 @@ public class WiFiSdkActivity extends BaseActivity {
         // filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         // filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         // registerReceiver(wifiReceiver, filter);
-
 
 
         // int uid = PackageInfoUtils.getUid(this, this.getPackageName());
@@ -165,6 +170,9 @@ public class WiFiSdkActivity extends BaseActivity {
         // });
         // }
         // });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -175,7 +183,7 @@ public class WiFiSdkActivity extends BaseActivity {
 
     private void setIpWithTfiStaticIp(WifiConfiguration wifiConfig) {
 
-        if (android.os.Build.VERSION.SDK_INT < 11) { // 如果是android2.x版本的话
+        if (Build.VERSION.SDK_INT < 11) { // 如果是android2.x版本的话
 
             ContentResolver ctRes = getContentResolver();
             Settings.System.putInt(ctRes, Settings.System.WIFI_USE_STATIC_IP, 1);
@@ -205,6 +213,11 @@ public class WiFiSdkActivity extends BaseActivity {
 
     private static void setIpAssignment(String assign, WifiConfiguration wifiConf)
             throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
+        try {
+            Class<?> clsaa = Class.forName("android.net.IpConfiguration");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         setEnumField(wifiConf, assign, "ipAssignment");
     }
 
@@ -230,7 +243,7 @@ public class WiFiSdkActivity extends BaseActivity {
         if (linkProperties == null)
             return;
 
-        if (android.os.Build.VERSION.SDK_INT >= 14) { // android4.x版本
+        if (Build.VERSION.SDK_INT >= 14) { // android4.x版本
             Class<?> routeInfoClass = Class.forName("android.net.RouteInfo");
             Constructor<?> routeInfoConstructor = routeInfoClass.getConstructor(new Class[] {InetAddress.class});
             Object routeInfo = routeInfoConstructor.newInstance(gateway);
@@ -329,16 +342,14 @@ public class WiFiSdkActivity extends BaseActivity {
 
     private void setWifiNeverSleep() {
         int wifiSleepPolicy = 0;
-        wifiSleepPolicy = Settings.System.getInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY,
-                Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        wifiSleepPolicy = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
         System.out.println("---> 修改前的Wifi休眠策略值 WIFI_SLEEP_POLICY=" + wifiSleepPolicy);
 
 
-        Settings.System.putInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
 
 
-        wifiSleepPolicy = Settings.System.getInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY,
-                Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        wifiSleepPolicy = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
         System.out.println("---> 修改后的Wifi休眠策略值 WIFI_SLEEP_POLICY=" + wifiSleepPolicy);
     }
 
@@ -354,7 +365,7 @@ public class WiFiSdkActivity extends BaseActivity {
 
     private void showMessageDialog(String title, String message, String positiveButtonText, boolean bShowCancel,
             DialogInterface.OnClickListener positiveButtonlistener) {
-        AlertDialog.Builder builder = new Builder(WiFiSdkActivity.this);
+        Builder builder = new Builder(WiFiSdkActivity.this);
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setPositiveButton(positiveButtonText, positiveButtonlistener);
@@ -429,6 +440,42 @@ public class WiFiSdkActivity extends BaseActivity {
             return null;
         }
         return connectMethod;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
+                "WiFiSdk Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.xiuxiuing.testing.activity/http/host/path"));
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
+                "WiFiSdk Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.xiuxiuing.testing.activity/http/host/path"));
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
     class WifiReceiver extends BroadcastReceiver {

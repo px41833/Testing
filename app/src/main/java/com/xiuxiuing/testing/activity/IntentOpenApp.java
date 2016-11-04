@@ -1,12 +1,13 @@
 package com.xiuxiuing.testing.activity;
 
+import com.xiuxiuing.testing.R;
+
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.xiuxiuing.testing.R;
+import android.telephony.TelephonyManager;
 
 /**
  * Created by wang on 16/5/6.
@@ -16,12 +17,17 @@ public class IntentOpenApp extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startWeiboGameDetailApp(this);
+
+        String mPhone = ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+        System.out.println("mPhone:" + mPhone);
 
         // goToSamsungappsMarket(this, "com.UCMobile");
-        goToMarket(this, "com.UCMobile");
+        // goToMarket(this, "com.UCMobile");
         // goToLeTVStore(this, "com.UCMobile");
         // goToLeTVStoreDetail(this, "com.sina.weibo");
-//        goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
+        // goToMarket.setClassName("com.tencent.android.qqdownloader",
+        // "com.tencent.pangu.link.LinkProxyActivity");
     }
 
 
@@ -54,6 +60,15 @@ public class IntentOpenApp extends BaseActivity {
         intent.setClassName("com.letv.app.appstore", "com.letv.app.appstore.appmodule.search.SearchActivity");
         intent.setAction("com.letv.mobile.appstore.search");
         intent.setData(uri);
+        context.startActivity(intent);
+    }
+
+    void startWeiboGameDetailApp(Context context) {
+        Uri uri = Uri.parse("sinaweibo://snggamedetail/1631951503?aid=503999&acid=0&auto=0");
+        Intent intent = new Intent();
+        intent.setClassName("com.sina.weibo", "com.sina.weibo.appmarket.sng.activity.SngGameDetailActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
         context.startActivity(intent);
     }
 
