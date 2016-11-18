@@ -2,17 +2,17 @@ package com.xiuxiuing.testing.activity;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.service.WifiService;
 import com.xiuxiuing.testing.utils.PasswordGetter;
@@ -24,7 +24,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -40,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,16 +64,13 @@ public class WiFiSdkActivity extends BaseActivity {
     EditText etIp;
     EditText etGetway;
     EditText etDns;
+    Button btnSet;
 
     List<ScanResult> listResults;
     String mSsid;
     String password;
     boolean cracking;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API. See
-     * https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -83,9 +80,10 @@ public class WiFiSdkActivity extends BaseActivity {
         etIp = (EditText) findViewById(R.id.et_ip);
         etGetway = (EditText) findViewById(R.id.et_getway);
         etDns = (EditText) findViewById(R.id.et_dns);
+        btnSet = (Button) findViewById(R.id.btn_set);
         listView = (ListView) findViewById(R.id.lv_wifisdk);
         wm = (WifiManager) getSystemService(WIFI_SERVICE);
-        wm.startScan();
+        // wm.startScan();
         System.out.println("init ");
 
         Intent intent = new Intent(this, WifiService.class);
@@ -94,6 +92,11 @@ public class WiFiSdkActivity extends BaseActivity {
         Field[] fields = WifiConfiguration.class.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             Log.i("fields:", fields[i].getName());
+        }
+
+        Method[] methods = WifiConfiguration.class.getMethods();
+        for (int j = 0; j < methods.length; j++) {
+            Log.i("Method:", methods[j].getName());
         }
 
 
@@ -138,6 +141,13 @@ public class WiFiSdkActivity extends BaseActivity {
         adapter = new MyAdapter(this, listResults);
         listView.setAdapter(adapter);
 
+        btnSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setIpWithTfiStaticIp();
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -172,7 +182,6 @@ public class WiFiSdkActivity extends BaseActivity {
         // });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -181,7 +190,18 @@ public class WiFiSdkActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    private void setIpWithTfiStaticIp(WifiConfiguration wifiConfig) {
+    private void setIpWithTfiStaticIp() {
+
+        WifiConfiguration wifiConfig = null;
+        WifiInfo connectionInfo = wm.getConnectionInfo(); // 得到连接的wifi网络
+
+        List<WifiConfiguration> configuredNetworks = wm.getConfiguredNetworks();
+        for (WifiConfiguration conf : configuredNetworks) {
+            if (conf.networkId == connectionInfo.getNetworkId()) {
+                wifiConfig = conf;
+                break;
+            }
+        }
 
         if (Build.VERSION.SDK_INT < 11) { // 如果是android2.x版本的话
 
@@ -193,9 +213,9 @@ public class WiFiSdkActivity extends BaseActivity {
             Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_DNS1, etDns.getText().toString());
             // Settings.System.putString(ctRes, Settings.System.WIFI_STATIC_DNS2, "61.134.1.9");
 
-        } else { // 如果是android3.x版本及以上的话
+        } else if (Build.VERSION.SDK_INT < 21) { // 如果是android3.x版本及以上的话
             try {
-                setIpAssignment("STATIC", wifiConfig);
+                setEnumField(wifiConfig, "STATIC");
                 setIpAddress(InetAddress.getByName(etIp.getText().toString()), 24, wifiConfig);
                 setGateway(InetAddress.getByName(etGetway.getText().toString()), wifiConfig);
                 setDNS(InetAddress.getByName(etDns.getText().toString()), wifiConfig);
@@ -207,18 +227,119 @@ public class WiFiSdkActivity extends BaseActivity {
                 System.out.println("静态ip设置失败！");
                 Toast.makeText(this, "静态ip设置失败", Toast.LENGTH_SHORT).show();
             }
+        } else if (Build.VERSION.SDK_INT < 24) {
+            try {
+
+                Object ipConfiguration = Class.forName("android.net.IpConfiguration").newInstance();
+                Field ipAssignment = ipConfiguration.getClass().getField("ipAssignment");
+                ipAssignment.set(ipConfiguration, Enum.valueOf((Class<Enum>) ipAssignment.getType(), "STATIC"));
+
+                Field staticIpConfigurationF = ipConfiguration.getClass().getField("staticIpConfiguration");
+
+                // setEnumFieldL(wifiConfig, "STATIC");
+
+                Object staticIpConfiguration = Class.forName("android.net.StaticIpConfiguration").newInstance();
+                Method clear = staticIpConfiguration.getClass().getMethod("clear");
+                clear.invoke(staticIpConfiguration);
+
+                Field ipAddress = staticIpConfiguration.getClass().getField("ipAddress");
+                Field gateway = staticIpConfiguration.getClass().getField("gateway");
+                Field dnsServers = staticIpConfiguration.getClass().getField("dnsServers");
+
+                ipAddress.set(staticIpConfiguration, setIpAddressL(InetAddress.getByName(etIp.getText().toString()), 24, wifiConfig));
+                gateway.set(staticIpConfiguration, InetAddress.getByName(etGetway.getText().toString()));
+                dnsServers.setAccessible(true);
+                dnsServers.set(staticIpConfiguration, setDNSL(InetAddress.getByName(etDns.getText().toString()), wifiConfig));
+
+                staticIpConfigurationF.set(ipConfiguration, staticIpConfiguration);
+
+
+                // Method m = wifiConfig.getClass().getMethod("setStaticIpConfiguration",
+                // Class.forName("android.net.StaticIpConfiguration").newInstance().getClass());
+                // m.invoke(wifiConfig, staticIpConfiguration);
+                Method m =
+                        wifiConfig.getClass().getMethod("setIpConfiguration", Class.forName("android.net.IpConfiguration").newInstance().getClass());
+                m.invoke(wifiConfig, ipConfiguration);
+
+                // Object mEthManager = Class.forName("android.net.EthernetManager").newInstance();
+                // Method setConfiguration =
+                // Class.forName("android.net.EthernetManager").newInstance().getClass().getMethod("setConfiguration",
+                // Class.forName("android.net.IpConfiguration").newInstance().getClass());
+                // setConfiguration.invoke(mEthManager, ipConfiguration);
+                // setIpAddressL(InetAddress.getByName(etIp.getText().toString()), 24, wifiConfig);
+                // setGatewayL(InetAddress.getByName(etGetway.getText().toString()), wifiConfig);
+                // setDNSL(InetAddress.getByName(etDns.getText().toString()), wifiConfig);
+
+                // wm.updateNetwork(wifiConfig); // apply the setting
+                // wm.saveConfiguration();
+                Class<?> c = Class.forName("android.net.wifi.WifiManager$ActionListener");
+                Object ob = Proxy.newProxyInstance(WiFiSdkActivity.class.getClassLoader(), new Class[] {c}, new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        return null;
+                    }
+                });
+                Method save = wm.getClass().getMethod("save", WifiConfiguration.class, Class.forName("android.net.wifi.WifiManager$ActionListener"));
+
+                save.invoke(wm, wifiConfig, ob);
+
+                System.out.println("静态ip设置成功！");
+                Toast.makeText(this, "静态ip设置成功", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Object ipConfiguration = Class.forName("android.net.IpConfiguration").newInstance();
+
+                Field ipAssignment = ipConfiguration.getClass().getField("ipAssignment");
+                ipAssignment.set(ipConfiguration, Enum.valueOf((Class<Enum>) ipAssignment.getType(), "STATIC"));
+
+                Inet4Address inetAddr = getIpv4Address(etIp.getText().toString());
+
+                Object staticIpConfiguration = Class.forName("android.net.StaticIpConfiguration").newInstance();
+                // Method clear = staticIpConfiguration.getClass().getMethod("clear");
+                // clear.invoke(staticIpConfiguration);
+
+                Field ipAddress = staticIpConfiguration.getClass().getField("ipAddress");
+                Field gateway = staticIpConfiguration.getClass().getField("gateway");
+                Field dnsServers = staticIpConfiguration.getClass().getField("dnsServers");
+
+                Constructor con = Class.forName("java.net.LinkAddress").getConstructor(InetAddress.class, Integer.TYPE);
+                ipAddress.set(staticIpConfiguration, con.newInstance(inetAddr, 24));
+
+                InetAddress gatewayAddr = getIpv4Address(etGetway.getText().toString());
+                gateway.set(staticIpConfiguration, gatewayAddr);
+
+                InetAddress dnsAddr = getIpv4Address(etDns.getText().toString());
+                dnsServers.setAccessible(true);
+                ArrayList<InetAddress> mDnses = new ArrayList<InetAddress>();
+                mDnses.add(dnsAddr);
+                dnsServers.set(staticIpConfiguration, mDnses);
+
+                Field staticIpConfigurationF = ipConfiguration.getClass().getField("staticIpConfiguration");
+                staticIpConfigurationF.set(ipConfiguration, staticIpConfiguration);
+
+                Object proxy = Class.forName("android.net.IpConfiguration.ProxySettings").newInstance();
+
+                Method m =
+                        wifiConfig.getClass().getMethod("setIpConfiguration", Class.forName("android.net.IpConfiguration").newInstance().getClass());
+                m.invoke(wifiConfig, ipConfiguration);
+
+                wm.updateNetwork(wifiConfig);
+                wm.saveConfiguration();
+
+            } catch (Exception e) {
+
+            }
         }
 
     }
 
     private static void setIpAssignment(String assign, WifiConfiguration wifiConf)
             throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
-        try {
-            Class<?> clsaa = Class.forName("android.net.IpConfiguration");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        setEnumField(wifiConf, assign, "ipAssignment");
+        // setEnumFieldL(wifiConf, assign);
+        setEnumField(wifiConf, assign);
     }
 
     private static void setIpAddress(InetAddress addr, int prefixLength, WifiConfiguration wifiConf)
@@ -234,6 +355,22 @@ public class WiFiSdkActivity extends BaseActivity {
         ArrayList<Object> mLinkAddresses = (ArrayList<Object>) getDeclaredField(linkProperties, "mLinkAddresses");
         mLinkAddresses.clear();
         mLinkAddresses.add(linkAddress);
+    }
+
+    private static Object setIpAddressL(InetAddress addr, int prefixLength, WifiConfiguration wifiConf)
+            throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, InvocationTargetException {
+        Object linkProperties = Class.forName("android.net.LinkProperties").newInstance();
+        if (linkProperties == null)
+            return null;
+        Class<?> laClass = Class.forName("android.net.LinkAddress");
+        Constructor<?> laConstructor = laClass.getConstructor(new Class[] {InetAddress.class, int.class});
+        Object linkAddress = laConstructor.newInstance(addr, prefixLength);
+
+        ArrayList<Object> mLinkAddresses = (ArrayList<Object>) getDeclaredField(linkProperties, "mLinkAddresses");
+        mLinkAddresses.clear();
+        mLinkAddresses.add(linkAddress);
+        return linkAddress;
     }
 
     private static void setGateway(InetAddress gateway, WifiConfiguration wifiConf)
@@ -259,6 +396,43 @@ public class WiFiSdkActivity extends BaseActivity {
 
     }
 
+    private Inet4Address getIpv4Address(String text) {
+        try {
+            Class<?> cls = Class.forName("java.net.InetAddress");
+            Method m = cls.getMethod("parseNumericAddress", String.class);
+            return (Inet4Address) m.invoke(null, text);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Object setGatewayL(InetAddress gateway, WifiConfiguration wifiConf)
+            throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException, ClassNotFoundException,
+            NoSuchMethodException, InstantiationException, InvocationTargetException {
+        Object linkProperties = Class.forName("android.net.LinkProperties").newInstance();
+        if (linkProperties == null)
+            return null;
+
+        if (Build.VERSION.SDK_INT >= 14) { // android4.x版本
+            Class<?> routeInfoClass = Class.forName("android.net.RouteInfo");
+            Constructor<?> routeInfoConstructor = routeInfoClass.getConstructor(new Class[] {InetAddress.class});
+            Object routeInfo = routeInfoConstructor.newInstance(gateway);
+
+            ArrayList<Object> mRoutes = (ArrayList<Object>) getDeclaredField(linkProperties, "mRoutes");
+            mRoutes.clear();
+            mRoutes.add(routeInfo);
+        } else { // android3.x版本
+            ArrayList<InetAddress> mGateways = (ArrayList<InetAddress>) getDeclaredField(linkProperties, "mGateways");
+            mGateways.clear();
+            mGateways.add(gateway);
+        }
+        return gateway;
+
+    }
+
+
     private static Object getField(Object obj, String name)
             throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field f = obj.getClass().getField(name);
@@ -274,11 +448,35 @@ public class WiFiSdkActivity extends BaseActivity {
         return out;
     }
 
+    private static void setStaticIpConfiguration(Object obj) {
+        try {
+
+
+
+        } catch (Exception e) {
+
+        }
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void setEnumField(Object obj, String value, String name)
+    private static void setEnumField(Object obj, String value)
             throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field f = obj.getClass().getField(name);
+        Field f = obj.getClass().getField("ipAssignment");
         f.set(obj, Enum.valueOf((Class<Enum>) f.getType(), value));
+
+    }
+
+    private static void setEnumFieldL(Object obj, String value)
+            throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        try {
+            Object o = Class.forName("android.net.IpConfiguration").newInstance();
+            Field ipAssignment = o.getClass().getField("ipAssignment");
+
+            Method m = obj.getClass().getMethod("setIpAssignment", ipAssignment.getType());
+            m.invoke(obj, Enum.valueOf((Class<Enum>) ipAssignment.getType(), value));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void setDNS(InetAddress dns, WifiConfiguration wifiConf)
@@ -292,6 +490,20 @@ public class WiFiSdkActivity extends BaseActivity {
         mDnses.add(dns);
         // 增加新的DNS
     }
+
+    private static ArrayList<InetAddress> setDNSL(InetAddress dns, WifiConfiguration wifiConf) throws Exception {
+        Object linkProperties = Class.forName("android.net.LinkProperties").newInstance();
+        if (linkProperties == null)
+            return null;
+        ArrayList<InetAddress> mDnses = (ArrayList<InetAddress>) getDeclaredField(linkProperties, "mDnses");
+        mDnses.clear();
+        // 清除原有DNS设置（如果只想增加，不想清除，词句可省略）
+        mDnses.add(dns);
+        // 增加新的DNS
+        return mDnses;
+    }
+
+
 
     private void deleteSavedConfigs(WifiManager wm) {
         System.out.println("deleteSavedConfigs");
@@ -323,7 +535,6 @@ public class WiFiSdkActivity extends BaseActivity {
         } else {
             wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         }
-        setIpWithTfiStaticIp(wc);
         int res = wm.addNetwork(wc);
         Method connMethod = connectWifiByReflectMethod(res);
         if (connMethod != null) {
@@ -446,36 +657,12 @@ public class WiFiSdkActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "WiFiSdk Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.xiuxiuing.testing.activity/http/host/path"));
-        AppIndex.AppIndexApi.start(client, viewAction);
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "WiFiSdk Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.xiuxiuing.testing.activity/http/host/path"));
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 
     class WifiReceiver extends BroadcastReceiver {
