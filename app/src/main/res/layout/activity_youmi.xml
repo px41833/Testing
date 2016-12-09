@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_spot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="插屏广告"/>
+
+    <Button
+        android:id="@+id/btn_slide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="轮播插屏广告"/>
+
+    <Button
+        android:id="@+id/btn_nativespot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="原生插屏广告"/>
+
+    <Button
+        android:id="@+id/btn_videoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="视频广告"/>
+
+    <Button
+        android:id="@+id/btn_nativevideoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="原生视频广告"/>
+
+    <Button
+        android:id="@+id/btn_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="广告条"/>
+
+</LinearLayout>

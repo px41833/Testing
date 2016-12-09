@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_douyu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="斗鱼"/>
+
+    <Button
+        android:id="@+id/btn_panda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="熊猫"/>
+
+    <Button
+        android:id="@+id/btn_huya"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="虎牙"/>
+
+    <Button
+        android:id="@+id/btn_longzhu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="龙珠"/>
+
+    <Button
+        android:id="@+id/btn_quanmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="全民"/>
+</LinearLayout>

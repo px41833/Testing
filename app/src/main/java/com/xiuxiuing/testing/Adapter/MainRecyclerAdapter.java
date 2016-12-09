@@ -1,6 +1,7 @@
 package com.xiuxiuing.testing.adapter;
 
 import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.activity.AdYiMiActivity;
 import com.xiuxiuing.testing.activity.AppinfoActivity;
 import com.xiuxiuing.testing.activity.CustomViewActivity;
 import com.xiuxiuing.testing.activity.IntentOpenApp;
@@ -31,7 +32,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             new ItemInfo(R.string.title_android_openappstore, R.string.desc_android_openappstore, IntentOpenApp.class),
             new ItemInfo(R.string.title_android_phoneinfo, R.string.desc_android_phoneinfo, PhoneInfoActivity.class),
             new ItemInfo(R.string.title_android_customview, R.string.desc_android_customview, CustomViewActivity.class),
-            new ItemInfo(R.string.title_android_appinfo, R.string.desc_android_appinfo, AppinfoActivity.class)};
+            new ItemInfo(R.string.title_android_appinfo, R.string.desc_android_appinfo, AppinfoActivity.class),
+            new ItemInfo(R.string.title_android_youmi, R.string.desc_android_youmi, AdYiMiActivity.class)};
 
     private Context mContext;
 

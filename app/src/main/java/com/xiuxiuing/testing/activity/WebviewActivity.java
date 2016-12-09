@@ -1,10 +1,5 @@
 package com.xiuxiuing.testing.activity;
 
-import java.io.InputStream;
-import java.lang.reflect.Field;
-
-import com.xiuxiuing.testing.R;
-
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,6 +18,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 import android.widget.ZoomButtonsController;
+
+import com.xiuxiuing.testing.R;
+
+import java.io.InputStream;
+import java.lang.reflect.Field;
 
 /**
  * Created by wang on 16/7/14.
@@ -53,7 +53,8 @@ public class WebviewActivity extends BaseActivity {
         }
 
         webView.requestFocus();
-        webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
+        // webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
+        webView.loadUrl("http://m.quanmin.tv/v/3158218?from=android");
         webView.setWebViewClient(client);
         webView.setWebChromeClient(chromeClient);
         webView.setDownloadListener(new MyDownloadListenter());

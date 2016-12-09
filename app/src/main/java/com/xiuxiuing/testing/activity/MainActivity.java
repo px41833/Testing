@@ -1,11 +1,5 @@
 package com.xiuxiuing.testing.activity;
 
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-
 import android.Manifest;
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
@@ -32,6 +26,12 @@ import android.widget.TextView;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
 
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 public class MainActivity extends AppCompatActivity {
     TextView hello = null;
     Handler handler = new Handler() {
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
-
 
         // hello = (TextView) findViewById(R.id.hello);
         //
@@ -244,7 +244,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
 
 

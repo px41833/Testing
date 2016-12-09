@@ -25,4 +25,7 @@
 
     <string name="title_android_appinfo">AppInfo</string>
     <string name="desc_android_appinfo">App相关信息</string>
+
+    <string name="title_android_youmi">YouMi广告</string>
+    <string name="desc_android_youmi">YouMi广告展示</string>
 </resources>
