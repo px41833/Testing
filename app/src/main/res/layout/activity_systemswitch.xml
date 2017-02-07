@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -9,81 +10,76 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_douyu"
+            android:id="@+id/system_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="斗鱼"/>
+            android:text="跳转到系统位置设置"/>
 
         <Button
-            android:id="@+id/btn_panda"
+            android:id="@+id/system_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="熊猫"/>
+            android:text="跳转到系统设置"/>
 
         <Button
-            android:id="@+id/btn_huya"
+            android:id="@+id/system_app"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="虎牙"/>
+            android:text="跳转到App管理"/>
 
         <Button
-            android:id="@+id/btn_longzhu"
+            android:id="@+id/system_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="龙珠"/>
+            android:text="跳转到显示设置"/>
 
         <Button
-            android:id="@+id/btn_quanmin"
+            android:id="@+id/system_sound"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="全民"/>
+            android:text="跳转到声音设置"/>
 
         <Button
-            android:id="@+id/btn_yingyongbao"
+            android:id="@+id/system_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="应用宝"/>
+            android:text="跳转到日期设置"/>
 
         <Button
-            android:id="@+id/btn_360zhushou"
+            android:id="@+id/system_sync"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="360手机助手"/>
+            android:text="跳转到同步设置"/>
 
         <Button
-            android:id="@+id/btn_sinagame"
+            android:id="@+id/system_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="新浪游戏"/>
+            android:text="跳转到输入设置"/>
 
         <Button
-            android:id="@+id/btn_jingdong"
+            android:id="@+id/system_flash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="京东"/>
+            android:text="开启闪光灯"/>
 
         <Button
-            android:id="@+id/btn_getui"
+            android:id="@+id/system_screen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="个推服务"/>
+            android:text="锁屏"/>
 
         <Button
-            android:id="@+id/btn_ifeng"
+            android:id="@+id/system_reboot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="凤凰新闻"/>
+            android:text="重启"/>
 
         <Button
-            android:id="@+id/btn_damai"
+            android:id="@+id/system_down"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="大麦网"/>
+            android:text="关机"/>
 
-        <Button
-            android:id="@+id/btn_qqlive"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="腾讯视频"/>
     </LinearLayout>
 </ScrollView>

@@ -1,19 +1,29 @@
 package com.xiuxiuing.testing.activity;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
+import com.socks.library.KLog;
+import com.xiuxiuing.testing.R;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.xiuxiuing.testing.R;
-
-import android.annotation.TargetApi;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.widget.TextView;
 
 /**
  * Created by wang on 16/8/9.
@@ -22,37 +32,60 @@ public class PhoneInfoActivity extends BaseActivity {
     TextView tvPhone;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phoneinfo);
         tvPhone = (TextView) findViewById(R.id.phoneifno);
         tvPhone.setText(getBuild() + getDeviceInfo());
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            final ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkRequest.Builder builder = new NetworkRequest.Builder();
 
-        // getRomVersion();
+            // 设置指定的网络传输类型(蜂窝传输) 等于手机网络
+            builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
 
-        // try {
-        // Class<?> classType = Class.forName("android.os.SystemProperties");
-        // Method[] method = classType.getDeclaredMethods();
-        // Field[] fields = classType.getDeclaredFields();
-        //
-        // for (int i = 0; i < method.length; i++) {
-        // Log.i("test", method[i].getName());
-        // }
-        //
-        // for (int i = 0; i < fields.length; i++) {
-        // Log.i("fields", fields[i].getName());
-        // }
-        //
-        // // Method getMethod = classType.getDeclaredMethod("get", new Class<?>[]{String.class});
-        // // String value = (String) getMethod.invoke(classType, new Object[]{"YOUKEY"});
-        // // Log.i("test", value);
-        //
-        //
-        // } catch (Exception e) {
-        // Log.e("test", e.getMessage(), e);
-        //
-        // }
+            // 设置感兴趣的网络功能
+            // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+
+            // 设置感兴趣的网络：计费网络
+            // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+
+            NetworkRequest request = builder.build();
+            ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
+                /**
+                 * Called when the framework connects and has declared a new network ready for use.
+                 * This callback may be called more than once if the {@link Network} that is
+                 * satisfying the request changes.
+                 */
+                @TargetApi(Build.VERSION_CODES.M)
+                @Override
+                public void onAvailable(Network network) {
+                    super.onAvailable(network);
+                    Log.i("test", "已根据功能和传输类型找到合适的网络" + network.toString());
+
+                    NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
+                    if (networkInfo.getState() != null && NetworkInfo.State.CONNECTED == networkInfo.getState()) {
+                        KLog.d("手机网络连接成功！");
+                    }
+                    // 只要一找到符合条件的网络就注销本callback
+                    // 你也可以自己进行定义注销的条件
+                    connectivityManager.unregisterNetworkCallback(this);
+
+                    // 通过network.openConnection 来获取URLConnection
+                    try {
+                        HttpURLConnection urlConnection = (HttpURLConnection) network.openConnection(new URL("http://www.baidu.com/s?wd=123"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // 或者 raw Socket
+                    // network.bindSocket(...);
+                }
+            };
+            connectivityManager.registerNetworkCallback(request, callback);
+            connectivityManager.requestNetwork(request, callback);
+        }
 
     }
 
@@ -67,7 +100,7 @@ public class PhoneInfoActivity extends BaseActivity {
 
     /**
      * 获取指定字段信息
-     * 
+     *
      * @return
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -98,7 +131,7 @@ public class PhoneInfoActivity extends BaseActivity {
 
     /**
      * 通过反射获取所有的字段信息
-     * 
+     *
      * @return
      */
     public String getDeviceInfo2() {

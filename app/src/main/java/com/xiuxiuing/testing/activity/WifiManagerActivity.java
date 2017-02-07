@@ -1,22 +1,10 @@
 package com.xiuxiuing.testing.activity;
 
-import java.net.NetworkInterface;
-import java.util.Enumeration;
-import java.util.List;
-
-import org.json.JSONObject;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.xiuxiuing.testing.R;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
-import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -27,6 +15,14 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.xiuxiuing.testing.R;
+
+import org.json.JSONObject;
+
+import java.net.NetworkInterface;
+import java.util.Enumeration;
+import java.util.List;
+
 /**
  * Created by wang on 16/5/30.
  */
@@ -34,11 +30,6 @@ public class WifiManagerActivity extends BaseActivity {
     TextView tvHello;
     WifiManager wm;
     WifiReceiver wifiReceiver;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API. See
-     * https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +99,6 @@ public class WifiManagerActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         registerReceiver(wifiReceiver, filter);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -229,37 +217,12 @@ public class WifiManagerActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "WifiManager Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.xiuxiuing.testing/http/host/path"));
-        AppIndex.AppIndexApi.start(client, viewAction);
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "WifiManager Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.xiuxiuing.testing/http/host/path"));
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 
     class WifiReceiver extends BroadcastReceiver {

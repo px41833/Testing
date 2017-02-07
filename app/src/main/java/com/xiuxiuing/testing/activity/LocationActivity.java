@@ -8,10 +8,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.socks.library.KLog;
 import com.xiuxiuing.testing.R;
 
 /**
@@ -34,6 +36,13 @@ public class LocationActivity extends BaseActivity {
             return;
         }
 
+        String sAll = Settings.System.getString(getContentResolver(), Settings.System.LOCATION_PROVIDERS_ALLOWED);
+        String mode = Settings.System.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        KLog.d("sAll: " + sAll);
+        KLog.d("mode: " + mode);
+
+        // gps network  gps,network
+
         // 判断GPS是否正常启动
         // if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         // Toast.makeText(this, "请开启GPS导航...", Toast.LENGTH_SHORT).show();
@@ -43,43 +52,43 @@ public class LocationActivity extends BaseActivity {
         // return;
         // }
 
-//
-//        try {
-//            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            Log.i(TAG, "经度：" + location.getLongitude());
-//            Log.i(TAG, "纬度：" + location.getLatitude());
-//            Log.i(TAG, "海拔：" + location.getAltitude());
-//            Log.i(TAG, "精确度:" + location.getAccuracy());
-//            Log.i(TAG, "速度:" + location.getSpeed());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//            Log.i(TAG, "经度：" + location.getLongitude());
-//            Log.i(TAG, "纬度：" + location.getLatitude());
-//            Log.i(TAG, "海拔：" + location.getAltitude());
-//            Log.i(TAG, "精确度:" + location.getAccuracy());
-//            Log.i(TAG, "速度:" + location.getSpeed());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            String bestProvider = lm.getBestProvider(getCriteria(), true);
-//            location = lm.getLastKnownLocation(bestProvider);
-//            Log.i(TAG, "时间：" + location.getTime());
-//            Log.i(TAG, "经度：" + location.getLongitude());
-//            Log.i(TAG, "纬度：" + location.getLatitude());
-//            Log.i(TAG, "海拔：" + location.getAltitude());
-//            Log.i(TAG, "精确度:" + location.getAccuracy());
-//            Log.i(TAG, "速度:" + location.getSpeed());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        //
+        // try {
+        // location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        // Log.i(TAG, "经度：" + location.getLongitude());
+        // Log.i(TAG, "纬度：" + location.getLatitude());
+        // Log.i(TAG, "海拔：" + location.getAltitude());
+        // Log.i(TAG, "精确度:" + location.getAccuracy());
+        // Log.i(TAG, "速度:" + location.getSpeed());
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        //
+        // try {
+        // location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        // Log.i(TAG, "经度：" + location.getLongitude());
+        // Log.i(TAG, "纬度：" + location.getLatitude());
+        // Log.i(TAG, "海拔：" + location.getAltitude());
+        // Log.i(TAG, "精确度:" + location.getAccuracy());
+        // Log.i(TAG, "速度:" + location.getSpeed());
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        //
+        // try {
+        // String bestProvider = lm.getBestProvider(getCriteria(), true);
+        // location = lm.getLastKnownLocation(bestProvider);
+        // Log.i(TAG, "时间：" + location.getTime());
+        // Log.i(TAG, "经度：" + location.getLongitude());
+        // Log.i(TAG, "纬度：" + location.getLatitude());
+        // Log.i(TAG, "海拔：" + location.getAltitude());
+        // Log.i(TAG, "精确度:" + location.getAccuracy());
+        // Log.i(TAG, "速度:" + location.getSpeed());
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
 
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, -1, -1, locationListener);
+         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, -1, -1, locationListener);
 
 
     }
@@ -111,12 +120,15 @@ public class LocationActivity extends BaseActivity {
             Log.i(TAG, "onLocationChanged经度：" + location.getLongitude());
             Log.i(TAG, "onLocationChanged纬度：" + location.getLatitude());
             Log.i(TAG, "onLocationChanged海拔：" + location.getAltitude());
-            if (ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(LocationActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(LocationActivity.this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
+                // ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
+                // public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                // int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
                 return;

@@ -7,6 +7,7 @@ import com.xiuxiuing.testing.activity.CustomViewActivity;
 import com.xiuxiuing.testing.activity.IntentOpenApp;
 import com.xiuxiuing.testing.activity.LocationActivity;
 import com.xiuxiuing.testing.activity.PhoneInfoActivity;
+import com.xiuxiuing.testing.activity.SystemSwitchActivity;
 import com.xiuxiuing.testing.activity.WebviewActivity;
 import com.xiuxiuing.testing.activity.WiFiSdkActivity;
 import com.xiuxiuing.testing.activity.WifiManagerActivity;
@@ -33,7 +34,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             new ItemInfo(R.string.title_android_phoneinfo, R.string.desc_android_phoneinfo, PhoneInfoActivity.class),
             new ItemInfo(R.string.title_android_customview, R.string.desc_android_customview, CustomViewActivity.class),
             new ItemInfo(R.string.title_android_appinfo, R.string.desc_android_appinfo, AppinfoActivity.class),
-            new ItemInfo(R.string.title_android_youmi, R.string.desc_android_youmi, AdYiMiActivity.class)};
+            new ItemInfo(R.string.title_android_youmi, R.string.desc_android_youmi, AdYiMiActivity.class),
+            new ItemInfo(R.string.title_android_system, R.string.desc_android_system, SystemSwitchActivity.class)};
 
     private Context mContext;
 

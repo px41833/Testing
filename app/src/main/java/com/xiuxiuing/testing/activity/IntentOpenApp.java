@@ -1,6 +1,7 @@
 package com.xiuxiuing.testing.activity;
 
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,18 +29,20 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         findViewById(R.id.btn_huya).setOnClickListener(this);
         findViewById(R.id.btn_longzhu).setOnClickListener(this);
         findViewById(R.id.btn_quanmin).setOnClickListener(this);
-        // startWeiboGameDetailApp(this);
+        findViewById(R.id.btn_yingyongbao).setOnClickListener(this);
+        findViewById(R.id.btn_360zhushou).setOnClickListener(this);
+        findViewById(R.id.btn_sinagame).setOnClickListener(this);
+        findViewById(R.id.btn_getui).setOnClickListener(this);
+        findViewById(R.id.btn_jingdong).setOnClickListener(this);
+        findViewById(R.id.btn_ifeng).setOnClickListener(this);
+        findViewById(R.id.btn_damai).setOnClickListener(this);
+        findViewById(R.id.btn_qqlive).setOnClickListener(this);
 
-        gotoJingDong();
         String mPhone = ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
         System.out.println("mPhone:" + mPhone);
 
-        // goToSamsungappsMarket(this, "com.UCMobile");
-        // goToMarket(this, "com.UCMobile");
-        // goToLeTVStore(this, "com.UCMobile");
-        // goToLeTVStoreDetail(this, "com.sina.weibo");
-        // goToMarket.setClassName("com.tencent.android.qqdownloader",
-        // "com.tencent.pangu.link.LinkProxyActivity");
+
+
     }
 
     @Override
@@ -60,10 +63,68 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
             case R.id.btn_quanmin:
                 gotoQuanMin(mContext);
                 break;
+            case R.id.btn_yingyongbao:
+                goToYingYongBaoMarket(mContext, "com.UCMobile");
+                break;
+            case R.id.btn_360zhushou:
+                goTo360ZhuShouMarket(mContext, "com.UCMobile");
+                break;
+            case R.id.btn_sinagame:
+                startWeiboGameDetailApp(mContext);
+                break;
+            case R.id.btn_getui:
+                startPushService(mContext);
+                break;
+            case R.id.btn_jingdong:
+                gotoJingDong();
+                break;
+            case R.id.btn_ifeng:
+                gotoIFeng();
+                break;
+            case R.id.btn_damai:
+                gotoQQLive();
+                break;
+            case R.id.btn_qqlive:
+                gotoQQLive();
+                break;
             default:
                 break;
         }
 
+    }
+
+    public void gotoYouku() {
+        Uri uri = Uri.parse("youku://http://m.youku.com/video/id_XMjQ5Nzk0ODg2NA==.html");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setClassName("com.youku.phone", "com.youku.ui.activity.WebViewActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void gotoQQLive() {
+        Uri uri = Uri.parse("tenvideo2://?action=1&cover_id=hrr3qneqbo22q06&video_id=o0022hmagay&from=zhinanchen791&jumpaction=2000&splash=1");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setClassName("com.tencent.qqlive", "com.tencent.qqlive.open.QQLiveOpenActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+
+    public static void startPushService(Context context) {
+        Intent serviceIntent = new Intent();
+        serviceIntent.setAction("com.igexin.sdk.action.service.message");
+        serviceIntent.setComponent(new ComponentName("com.wifi.test", "com.igexin.sdk.PushService"));
+        context.startService(serviceIntent);
+
+        // Intent convoyIntent = new Intent();
+        // convoyIntent.setClassName("com.wifi.test", "com.igexin.sdk.GActivity");
+        // convoyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // System.out.println("uri:" + convoyIntent.toString());
+        // context.startActivity(convoyIntent);
     }
 
     public static void gotoDouyu(Context context) {
@@ -162,12 +223,22 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     }
 
-
-    public static void goToMarket(Context context, String packageName) {
+    public static void goToYingYongBaoMarket(Context context, String packageName) {
         Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
             goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
+            context.startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void goTo360ZhuShouMarket(Context context, String packageName) {
+        Uri uri = Uri.parse("market://details?id=" + packageName);
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            goToMarket.setClassName("com.qihoo.appstore", "com.qihoo.appstore.distribute.SearchDistributionActivity");
             context.startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
@@ -205,10 +276,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     }
 
     void goToLeTVStoreDetail(Context context, String packageName) {
-        // Uri uri = Uri.parse("http://base.mapi.letvstore.com/mapi/app/share?packagename=" +
-        // packageName);
-        // Uri uri = Uri.parse("http://base.mapi.letvstore.com/mapi/app/detail?packagename=" +
-        // packageName);
+
         Intent intent = new Intent();
         intent.setClassName("com.letv.app.appstore", "com.letv.app.appstore.appmodule.details.DetailsActivity");
         intent.setAction("com.letv.app.appstore.appdetailactivity");
@@ -221,12 +289,29 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     void gotoJingDong() {
 
         Uri uri = Uri.parse(
-                "openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"m\",\"sourceValue\":\"sourceValue_gtDQ\",\"sourceType\":\"sourceType_gtDQ\",\"url\":\"http://h5.m.jd.com/active/3HsWjHqFvqwd9T5icf9ah7LyTSUf/index.html\"}");
+                "openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"m\",\"sourceValue\":\"sourceValue_gtDQ\",\"sourceType\":\"sourceType_gtDQ\",\"url\":\"http://h5.m.jd.com/active/3C3kFqSMepFJNpTRCfUgnsCdoTnh/index.html\"}");
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        System.out.println(intent.toURI().toString());
 
 
         startActivity(intent);
+
+    }
+
+    void gotoIFeng() {
+        Intent uri = null;
+        try {
+            uri = Intent.parseUri(
+                    "#Intent;package=com.ifeng.news2;component=com.ifeng.news2/.activity.DetailActivity;S.extra.com.ifeng.news2.id=030010050602229;end",
+                    0);
+            System.out.println(uri.toURI().toString());
+            startActivity(uri);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        //
 
     }
 

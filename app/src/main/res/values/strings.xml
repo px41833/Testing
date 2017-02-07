@@ -28,4 +28,9 @@
 
     <string name="title_android_youmi">YouMi广告</string>
     <string name="desc_android_youmi">YouMi广告展示</string>
+
+    <string name="title_android_system">系统开关设置</string>
+    <string name="desc_android_system">Android 系统开关，wifi、手电筒等的开关</string>
+
+    <string name="desc">微信红包</string>
 </resources>
