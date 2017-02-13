@@ -3,12 +3,13 @@ package com.xiuxiuing.testing.service;
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.PendingIntent;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.socks.library.KLog;
+import com.xiuxiuing.testing.utils.ProcessesUtils;
 
 import java.util.List;
 
@@ -19,42 +20,29 @@ public class RedMoneyService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         int eventType = event.getEventType();
+        KLog.d("eventtype:" + eventType + ": " + event.getClassName().toString());
+        KLog.d("foreApp:" + ProcessesUtils.getForegroundApp());
         switch (eventType) {
             // 第一步：监听通知栏消息
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                List<CharSequence> texts = event.getText();
-                if (!texts.isEmpty()) {
-                    for (CharSequence text : texts) {
-                        String content = text.toString();
-                        Log.i("demo", "text:" + content);
-                        if (content.contains("[微信红包]")) {
-                            // 模拟打开通知栏消息
-                            if (event.getParcelableData() != null && event.getParcelableData() instanceof Notification) {
-                                Notification notification = (Notification) event.getParcelableData();
-                                PendingIntent pendingIntent = notification.contentIntent;
-                                try {
-                                    pendingIntent.send();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }
+                if (event.getParcelableData() != null && event.getParcelableData() instanceof Notification) {
+                    // Notification notification = (Notification) event.getParcelableData();
+                    // // 打开通知栏的intent，即打开对应的聊天界面
+                    // PendingIntent pendingIntent = notification.contentIntent;
+                    // IntentSender sender = pendingIntent.getIntentSender();
+                    // sender.getTargetPackage();
+                    //
+                    // KLog.d("intent:" + pendingIntent.toString());
                 }
+
                 break;
             // 第二步：监听是否进入微信红包消息界面
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                String className = event.getClassName().toString();
-                KLog.d("className:" + className);
-                if (className.equals("com.tencent.mm.ui.LauncherUI")) {
-                    // 开始抢红包
-                    getPacket();
-                } else if (className.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
-                    // 开始打开红包
-                    openPacket();
-                }
-                // com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI
-                // com.tencent.mm.ui.base.p
+
+                break;
+            case AccessibilityEvent.TYPE_VIEW_CLICKED:
+                Parcelable data = event.getParcelableData();
+                KLog.d("data");
                 break;
         }
     }

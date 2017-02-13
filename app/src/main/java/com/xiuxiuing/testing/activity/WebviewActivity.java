@@ -1,5 +1,11 @@
 package com.xiuxiuing.testing.activity;
 
+import java.io.InputStream;
+import java.lang.reflect.Field;
+
+import com.socks.library.KLog;
+import com.xiuxiuing.testing.R;
+
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,11 +24,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 import android.widget.ZoomButtonsController;
-
-import com.xiuxiuing.testing.R;
-
-import java.io.InputStream;
-import java.lang.reflect.Field;
 
 /**
  * Created by wang on 16/7/14.
@@ -54,12 +55,12 @@ public class WebviewActivity extends BaseActivity {
 
         webView.requestFocus();
         // webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
-        webView.loadUrl("http://www.baidu.com");
+        webView.loadUrl("http://v.youku.com/v_show/id_XMjQ5OTI2MDc4MA==.html?x&sharefrom=android");
         webView.setWebViewClient(client);
         webView.setWebChromeClient(chromeClient);
         webView.setDownloadListener(new MyDownloadListenter());
 
-        webView.addJavascriptInterface(new JSInterface(), "Android");
+        // webView.addJavascriptInterface(new JSInterface(), "Android");
 
     }
 
@@ -86,6 +87,7 @@ public class WebviewActivity extends BaseActivity {
     WebViewClient client = new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            KLog.d("url:" + url);
             return super.shouldOverrideUrlLoading(view, url);
         }
 

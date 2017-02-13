@@ -37,11 +37,22 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         findViewById(R.id.btn_ifeng).setOnClickListener(this);
         findViewById(R.id.btn_damai).setOnClickListener(this);
         findViewById(R.id.btn_qqlive).setOnClickListener(this);
+        findViewById(R.id.btn_youku).setOnClickListener(this);
+        findViewById(R.id.btn_dianping).setOnClickListener(this);
+        findViewById(R.id.btn_tudou).setOnClickListener(this);
+        findViewById(R.id.btn_souhu).setOnClickListener(this);
+        findViewById(R.id.btn_aiqiyi).setOnClickListener(this);
+        findViewById(R.id.btn_tuniu).setOnClickListener(this);
+        findViewById(R.id.btn_baidu).setOnClickListener(this);
+        findViewById(R.id.btn_leshi).setOnClickListener(this);
+        findViewById(R.id.btn_qunar).setOnClickListener(this);
+        findViewById(R.id.btn_xiecheng).setOnClickListener(this);
+        findViewById(R.id.btn_chunqiu).setOnClickListener(this);
+        findViewById(R.id.btn_momo).setOnClickListener(this);
+        findViewById(R.id.btn_huajiao).setOnClickListener(this);
 
         String mPhone = ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
         System.out.println("mPhone:" + mPhone);
-
-
 
     }
 
@@ -82,10 +93,49 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
                 gotoIFeng();
                 break;
             case R.id.btn_damai:
-                gotoQQLive();
+                gotoDamai();
                 break;
             case R.id.btn_qqlive:
                 gotoQQLive();
+                break;
+            case R.id.btn_youku:
+                gotoYouku();
+                break;
+            case R.id.btn_dianping:
+                gotoDianping();
+                break;
+            case R.id.btn_tudou:
+                gotoTuDou();
+                break;
+            case R.id.btn_souhu:
+                gotoSouhu();
+                break;
+            case R.id.btn_aiqiyi:
+                gotoIqiyi();
+                break;
+            case R.id.btn_tuniu:
+                gotoTuniu();
+                break;
+            case R.id.btn_baidu:
+                gotoBaidu();
+                break;
+            case R.id.btn_leshi:
+                gotoLeshi();
+                break;
+            case R.id.btn_qunar:
+                gotoQuna();
+                break;
+            case R.id.btn_xiecheng:
+                gotoXieCheng();
+                break;
+            case R.id.btn_chunqiu:
+                gotoChunqiu();
+                break;
+            case R.id.btn_momo:
+                gotoMomo();
+                break;
+            case R.id.btn_huajiao:
+                gotoHuajiao();
                 break;
             default:
                 break;
@@ -93,21 +143,140 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     }
 
-    public void gotoYouku() {
-        Uri uri = Uri.parse("youku://http://m.youku.com/video/id_XMjQ5Nzk0ODg2NA==.html");
+    public void startIntent(String uriString, String pkgName, String className) {
+        Uri uri = Uri.parse(uriString);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setClassName("com.youku.phone", "com.youku.ui.activity.WebViewActivity");
+        intent.setClassName(pkgName, className);
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void startIntent(String uriString) {
+        Uri uri = Uri.parse(uriString);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        System.out.println("intent:" + intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void gotoHuajiao() {
+        startIntent("huajiao://huajiao.com/goto/live?liveid=79619083");
+    }
+
+    public void gotoMomo() {
+        startIntent("momochat://immomo.com?goto=[点击观看|goto_plive_profile|1457967628432|share_page]");
+    }
+
+    public void gotoChunqiu() {
+        // cq://m.springtour.com/vacation/82694
+        startIntent("cq://m.springtour.com/tour/22087");
+    }
+
+    public void gotoXieCheng() {
+        // ctrip://wireless/InlandHotel?checkInDate=20170210&checkOutDate=20170211&hotelId=435383&hotelDataType=1
+        startIntent("ctrip://wireless/hotel_wise_detail?c1=20170213&c2=20170214&c3=435383&c4=1", "ctrip.android.view",
+                "ctrip.android.view.view.CtripBootActivity");
+    }
+
+    public void gotoQuna() {
+        startIntent("qunaraphone://hy?mixedmode=0&type=navibar-none&url=https://touch.dujia.qunar.com/detail.qunar?id=499613064");
+    }
+
+    public void gotoLeshi() {
+        startIntent("letvclient://msiteAction?actionType=9&vid=27209469&isfullscene=false");
+    }
+
+    public void gotoBaidu() {
+        startIntent(
+                "bdvideo://invoke?intent=#Intent;action=com.baidu.search.video;launchFlags=0x8000;component=com.baidu.video/.ui.ThirdInvokeActivtiy;S.vid=23833;S.vtype=tvplay;S.episode=1;end");
+    }
+
+
+    public void gotoTuniu() {
+        // tuniuapp://travel/product_detail?product_id=210155472&product_type=102
+        startIntent("tuniuandroid://productdetail/102/210155472?pValue=16213", "com.tuniu.app.ui", "com.tuniu.app.ui.homepage.LaunchActivity");
+    }
+
+    public void gotoDamai() {
+        Uri uri = Uri.parse("dmextension://page1/code?code=113233");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setClassName("cn.damai", "cn.damai.activity.ProjectDetailActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void gotoIqiyi() {
+        Uri uri = Uri.parse("iqiyi://mobile/player?aid=204166701&vid=5d2157eabcea7a5a82c0ca8975063d43");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        // intent.setClassName("com.qiyi.video", "org.iqiyi.video.activity.PlayerActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void gotoSouhu() {
+        Uri uri = Uri.parse("sohuvideo://?action=1.1&vid=3357313");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        // intent.setClassName("com.sohu.sohuvideo", "com.sohu.sohuvideo.ui.SohuEntryActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+
+        // try {
+        // Intent intent = Intent.parseUri(
+        // "intent://?action=1.1&vid=3357313&backpage=0#Intent;scheme=sohuvideo;package=com.sohu.sohuvideo;end",
+        // 0);
+        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // mContext.startActivity(intent);
+        // } catch (URISyntaxException e) {
+        // e.printStackTrace();
+        // }
+    }
+
+    public void gotoTuDou() {
+        Uri uri = Uri.parse("tudou://itemcode=9l2kqzTlFR4");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        // intent.setClassName("com.tudou.android", "com.tudou.ui.activity.DetailActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void gotoDianping() {
+        // dptuan://tuandeal?id=22576529
+        Uri uri = Uri.parse("dianping://shopinfo?id=18149081");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        // intent.setClassName("com.dianping.v1",
+        // "com.dianping.baseshop.activity.ShopInfoActivity");
+        intent.setData(uri);
+        System.out.println(intent.toURI().toString());
+        mContext.startActivity(intent);
+    }
+
+    public void gotoYouku() {
+        Uri uri = Uri.parse("youku://play?action=play&vid=XMjUwMTQ4Nzc2OA&source=ascheme-limitedplaybutton");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        // intent.setClassName("com.youku.phone", "com.youku.ui.activity.DetailActivity");
         intent.setData(uri);
         System.out.println(intent.toURI().toString());
         mContext.startActivity(intent);
     }
 
     public void gotoQQLive() {
-        Uri uri = Uri.parse("tenvideo2://?action=1&cover_id=hrr3qneqbo22q06&video_id=o0022hmagay&from=zhinanchen791&jumpaction=2000&splash=1");
+        Uri uri = Uri.parse("tenvideo2://?action=1&video_id=x00229vvcah");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setClassName("com.tencent.qqlive", "com.tencent.qqlive.open.QQLiveOpenActivity");
+        // intent.setClassName("com.tencent.qqlive", "com.tencent.qqlive.open.QQLiveOpenActivity");
         intent.setData(uri);
         System.out.println(intent.toURI().toString());
         mContext.startActivity(intent);

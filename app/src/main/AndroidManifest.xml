@@ -86,6 +86,7 @@
         <activity android:name=".activity.SystemSwitchActivity"/>
 
         <service android:name=".service.WifiService"/>
+        <service android:name=".service.MainService"/>
 
         <receiver android:name="com.xiuxiuing.testing.receiver.StaticReceiver">
             <intent-filter>
