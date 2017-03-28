@@ -1,11 +1,11 @@
 package com.xiuxiuing.testing.utils;
 
+import com.socks.library.KLog;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import com.socks.library.KLog;
 
 /**
  * Created by wang on 17/2/13.
@@ -17,6 +17,7 @@ public class ProcessesUtils {
     public static final int AID_USER = 100000;
 
     public static String getForegroundApp() {
+
         File[] files = new File("/proc").listFiles();
         int lowestOomScore = Integer.MAX_VALUE;
         String foregroundProcess = null;

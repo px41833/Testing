@@ -10,7 +10,6 @@ import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.listener.ClsaaSpotListener;
 import com.xiuxiuing.testing.utils.PermissionHelper;
 
-import net.youmi.android.AdManager;
 import net.youmi.android.normal.spot.SplashViewSettings;
 import net.youmi.android.normal.spot.SpotManager;
 
@@ -63,7 +62,8 @@ public class SplashActivity extends Activity {
 
     private void runApp() {
         // 初始化SDK
-        AdManager.getInstance(this.getApplicationContext()).init("a3cd7b10a504bd7c", "aafa9eabb1fefbfd", true, true);
+        // AdManager.getInstance(this.getApplicationContext()).init("a3cd7b10a504bd7c",
+        // "aafa9eabb1fefbfd", true, true);
         // 设置开屏
         SplashViewSettings splashViewSettings = new SplashViewSettings();
         splashViewSettings.setTargetClass(MainActivity.class);

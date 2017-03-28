@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
 
+import com.socks.library.KLog;
 import com.xiuxiuing.testing.R;
-
-import java.net.URISyntaxException;
 
 /**
  * Created by wang on 16/5/6.
@@ -50,9 +49,25 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         findViewById(R.id.btn_chunqiu).setOnClickListener(this);
         findViewById(R.id.btn_momo).setOnClickListener(this);
         findViewById(R.id.btn_huajiao).setOnClickListener(this);
+        findViewById(R.id.btn_360service).setOnClickListener(this);
+        findViewById(R.id.btn_360activity).setOnClickListener(this);
 
         String mPhone = ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
         System.out.println("mPhone:" + mPhone);
+
+        // startIntent("taobao://a.m.taobao.com/i524638533701.htm", "com.taobao.taobao",
+        // "com.taobao.tao.detail.activity.DetailActivity");
+        startTmallShop();
+
+        // try {
+        // Intent intent = new Intent();
+        // intent.setClassName("com.getui.library.startapp",
+        // "com.getui.library.startapp.MainService");
+        // mContext.startService(intent);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+
 
     }
 
@@ -137,6 +152,12 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
             case R.id.btn_huajiao:
                 gotoHuajiao();
                 break;
+            case R.id.btn_360service:
+                start360Service();
+                break;
+            case R.id.btn_360activity:
+                start360Activity();
+                break;
             default:
                 break;
         }
@@ -144,22 +165,34 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     }
 
     public void startIntent(String uriString, String pkgName, String className) {
-        Uri uri = Uri.parse(uriString);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setClassName(pkgName, className);
-        intent.setData(uri);
-        System.out.println(intent.toURI().toString());
-        mContext.startActivity(intent);
+        try {
+            Uri uri = Uri.parse(uriString);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setClassName(pkgName, className);
+            intent.setData(uri);
+            System.out.println(intent.toURI().toString());
+            KLog.d("intent:" + intent.toURI().toString());
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void startIntent(String uriString) {
-        Uri uri = Uri.parse(uriString);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(uri);
-        System.out.println("intent:" + intent.toURI().toString());
-        mContext.startActivity(intent);
+        try {
+            Uri uri = Uri.parse(uriString);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setData(uri);
+            System.out.println("intent:" + intent.toURI().toString());
+            KLog.d("intent:" + intent.toURI().toString());
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void gotoHuajiao() {
@@ -177,7 +210,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     public void gotoXieCheng() {
         // ctrip://wireless/InlandHotel?checkInDate=20170210&checkOutDate=20170211&hotelId=435383&hotelDataType=1
-        startIntent("ctrip://wireless/hotel_wise_detail?c1=20170213&c2=20170214&c3=435383&c4=1", "ctrip.android.view",
+        startIntent("ctrip://wireless/vacation_group_detail?c1=17&c2=13757975&c3=17", "ctrip.android.view",
                 "ctrip.android.view.view.CtripBootActivity");
     }
 
@@ -316,24 +349,22 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     }
 
     public static void gotoHuya(Context context) {
-
+        // dat=yykiwi://channel?sid=77259038&subSid=2535706816
         Intent intent = null;
         try {
+            // intent = new Intent();
+            // intent.setAction(Intent.ACTION_VIEW);
+            // Uri uri =
+            // Uri.parse("#Intent;component=com.duowan.kiwi/com.duowan.kiwi.channelpage.ChannelPage;l.subSid=2535706816;l.sid=77259038;end");
+            // intent.setData(uri);
             intent = Intent
-                    .parseUri("#Intent;component=com.duowan.kiwi/com.duowan.kiwi.channelpage.ChannelPage;l.subSid=2546866994;l.sid=77259038;end", 0);
-        } catch (URISyntaxException e) {
+                    .parseUri("#Intent;component=com.duowan.kiwi/com.duowan.kiwi.channelpage.ChannelPage;l.subSid=2535706816;l.sid=77259038;end", 0);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println(intent.toURI().toString());
         context.startActivity(intent);
 
-        // Uri uri = Uri.parse("kiwi://live?gameId=1&subSid=2535702558");
-        // Intent intent = new Intent();
-        // intent.setAction(Intent.ACTION_VIEW);
-        // intent.setClassName("com.duowan.kiwi", "com.duowan.kiwi.channelpage.ChannelPage");
-        // intent.setData(uri);
-        // System.out.println(intent.toURI().toString());
-        // context.startActivity(intent);
     }
 
     public static void gotoLongZhu(Context context) {
@@ -351,7 +382,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         // context.startActivity(intent);
 
 
-        Uri uri = Uri.parse("plulongzhulive://room/openwith?roomId=537278");
+        Uri uri = Uri.parse("plulongzhulive://room/openwith?roomId=348652");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setClassName("com.longzhu.tga", "com.longzhu.tga.clean.main.MainActivity");
@@ -392,26 +423,25 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     }
 
-    public static void goToYingYongBaoMarket(Context context, String packageName) {
-        Uri uri = Uri.parse("market://details?id=" + packageName);
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
-            context.startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void goToYingYongBaoMarket(Context context, String packageName) {
+        // 自动下载
+        // startIntent("tpmast://appdetails?pname=" + packageName +
+        // "&versioncode=0&oplist=1&via=ANDROIDQQ.YYB.SHARESOURCE&request_type=1",
+        // "com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
+        startIntent("market://details?action=1&id=" + packageName, "com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
     }
 
-    public static void goTo360ZhuShouMarket(Context context, String packageName) {
-        Uri uri = Uri.parse("market://details?id=" + packageName);
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            goToMarket.setClassName("com.qihoo.appstore", "com.qihoo.appstore.distribute.SearchDistributionActivity");
-            context.startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void goTo360ZhuShouMarket(Context context, String packageName) {
+        startIntent("market://details?id=com.UCMobile", "com.qihoo.appstore", "com.qihoo.appstore.distribute.SearchDistributionActivity");
+        // Uri uri = Uri.parse("market://details?id=" + packageName);
+        // Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // try {
+        // goToMarket.setClassName("com.qihoo.appstore",
+        // "com.qihoo.appstore.distribute.SearchDistributionActivity");
+        // context.startActivity(goToMarket);
+        // } catch (ActivityNotFoundException e) {
+        // e.printStackTrace();
+        // }
     }
 
     public static void goToSamsungappsMarket(Context context, String packageName) {
@@ -436,7 +466,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     }
 
     void startWeiboGameDetailApp(Context context) {
-        Uri uri = Uri.parse("sinaweibo://snggamedetail/1631951503?aid=503999&acid=0&auto=0");
+        Uri uri = Uri.parse("sinaweibo://snggamedetail/2649115076?aid=503972&acid=0&auto=0");
         Intent intent = new Intent();
         intent.setClassName("com.sina.weibo", "com.sina.weibo.appmarket.sng.activity.SngGameDetailActivity");
         intent.setData(uri);
@@ -458,7 +488,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     void gotoJingDong() {
 
         Uri uri = Uri.parse(
-                "openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"m\",\"sourceValue\":\"sourceValue_gtDQ\",\"sourceType\":\"sourceType_gtDQ\",\"url\":\"http://h5.m.jd.com/active/3C3kFqSMepFJNpTRCfUgnsCdoTnh/index.html\"}");
+                "openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"m\",\"sourceValue\":\"sourceValue_gtDQ\",\"sourceType\":\"sourceType_gtDQ\",\"url\":\"https://item.m.jd.com/product/3772942.html\"}");
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         System.out.println(intent.toURI().toString());
@@ -484,5 +514,33 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     }
 
+    public void start360Service() {
+        Intent intent = new Intent();
+        intent.putExtra("p_from", 10001);
+        intent.setClassName("com.qihoo360.mobilesafe", "com.qihoo360.mobilesafe.service.helper.GuardHelperService");
+        System.out.println(intent.toURI().toString());
+        startService(intent);
+    }
+
+    public void start360Activity() {
+        Intent intent = new Intent();
+        intent.putExtra("from", 10001);
+        intent.setClassName("com.qihoo360.mobilesafe", "com.qihoo360.mobilesafe.support.ms.EmptyExitActivity");
+        System.out.println(intent.toURI().toString());
+        startActivity(intent);
+    }
+
+    public void startTmallShop() {
+
+        Uri uri = Uri.parse("bdvideo://invoke?intent=#Intent;action=com.baidu.search.video;component=com.baidu.video/.ui.ThirdInvokeActivtiy;S.refer=http://baidu.ku6.com/watch/07853306887093450973.html;S.vtype=normal;S.title=两美女床上互贴挑逗 血脉贲张;end");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(uri);
+        KLog.e("START u0:" + intent.toURI().toString());
+        mContext.startActivity(intent);
+
+
+    }
 
 }

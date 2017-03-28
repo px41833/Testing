@@ -1,29 +1,31 @@
 package com.xiuxiuing.testing.activity;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
-import android.net.NetworkRequest;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
-
-import com.socks.library.KLog;
-import com.xiuxiuing.testing.R;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.socks.library.KLog;
+import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.utils.TelephonyUtils;
+
+import android.annotation.TargetApi;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.TextView;
 
 /**
  * Created by wang on 16/8/9.
@@ -35,57 +37,109 @@ public class PhoneInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phoneinfo);
+        StringBuilder sb = new StringBuilder();
+
         tvPhone = (TextView) findViewById(R.id.phoneifno);
-        tvPhone.setText(getBuild() + getDeviceInfo());
+        // tvPhone.setText(getBuild() + getDeviceInfo());
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        sb.append("imei:").append(tm.getDeviceId()).append("\n");
+        KLog.d("imei:" + tm.getDeviceId());
+        KLog.d("imsi:" + tm.getSubscriberId());
+        sb.append("imsi:").append(tm.getSubscriberId()).append("\n");
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            final ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        TelephonyUtils telephonyUtils = new TelephonyUtils(this);
+        int subid1 = telephonyUtils.getSubId1();
+        int subid2 = telephonyUtils.getSubId2();
+        KLog.d("subid1:" + subid1);
+        sb.append("subid1:").append(telephonyUtils.getSubId1()).append("\n");
+        KLog.d("subid2:" + subid2);
+        sb.append("subid2:").append(telephonyUtils.getSubId2()).append("\n");
 
-            // 设置指定的网络传输类型(蜂窝传输) 等于手机网络
-            builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        sb.append("imei1:").append(telephonyUtils.getDeviced1()).append("\n");
+        sb.append("imei2:").append(telephonyUtils.getDeviced2()).append("\n");
+        sb.append("imsi1:").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId1())).append("\n");
+        sb.append("imsi2:").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId2())).append("\n");
+        sb.append("iccid1:").append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId1())).append("\n");
+        sb.append("iccid2:").append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId2())).append("\n");
 
-            // 设置感兴趣的网络功能
-            // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        sb.append("num1:").append(telephonyUtils.getLine1NumberForSubscriber(telephonyUtils.getSubId1())).append("\n");
+        sb.append("num2:").append(telephonyUtils.getLine1NumberForSubscriber(telephonyUtils.getSubId2())).append("\n");
 
-            // 设置感兴趣的网络：计费网络
-            // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        tvPhone.setText(sb.toString());
+        // printAllMethods(telephonyUtils.getClass(), telephonyUtils);
+        //
+        // KLog.d(telephonyUtils.getSimSerialNumber(subid1) + "," +
+        // telephonyUtils.getSimSerialNumber(subid2));
+        // KLog.d(telephonyUtils.getCurrentPhoneType(subid1) + "," +
+        // telephonyUtils.getCurrentPhoneType(subid2));
+        // KLog.d(telephonyUtils.getDataNetworkType(subid1) + "," +
+        // telephonyUtils.getDataNetworkType(subid2));
+        // KLog.d(telephonyUtils.getLine1NumberForSubscriber(subid1) + "," +
+        // telephonyUtils.getLine1NumberForSubscriber(subid2));
+        // KLog.d(telephonyUtils.getNetworkOperatorForSubscription(subid1) + "," +
+        // telephonyUtils.getNetworkOperatorForSubscription(subid2));
 
-            NetworkRequest request = builder.build();
-            ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
-                /**
-                 * Called when the framework connects and has declared a new network ready for use.
-                 * This callback may be called more than once if the {@link Network} that is
-                 * satisfying the request changes.
-                 */
-                @TargetApi(Build.VERSION_CODES.M)
-                @Override
-                public void onAvailable(Network network) {
-                    super.onAvailable(network);
-                    Log.i("test", "已根据功能和传输类型找到合适的网络" + network.toString());
 
-                    NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
-                    if (networkInfo.getState() != null && NetworkInfo.State.CONNECTED == networkInfo.getState()) {
-                        KLog.d("手机网络连接成功！");
-                    }
-                    // 只要一找到符合条件的网络就注销本callback
-                    // 你也可以自己进行定义注销的条件
-                    connectivityManager.unregisterNetworkCallback(this);
+        // initQualcommDoubleSim();
+        // initMtkDoubleSim();
+        // initMtkSecondDoubleSim();
+        // getPhoneImsiNum(this);
+        //
+        // getSimIccId(this);
 
-                    // 通过network.openConnection 来获取URLConnection
-                    try {
-                        HttpURLConnection urlConnection = (HttpURLConnection) network.openConnection(new URL("http://www.baidu.com/s?wd=123"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
-                    // 或者 raw Socket
-                    // network.bindSocket(...);
-                }
-            };
-            connectivityManager.registerNetworkCallback(request, callback);
-            connectivityManager.requestNetwork(request, callback);
-        }
+        // if (Build.VERSION.SDK_INT >= 21) {
+        // final ConnectivityManager connectivityManager = (ConnectivityManager)
+        // this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        //
+        // // 设置指定的网络传输类型(蜂窝传输) 等于手机网络
+        // builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        //
+        // // 设置感兴趣的网络功能
+        // // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        //
+        // // 设置感兴趣的网络：计费网络
+        // // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        //
+        // NetworkRequest request = builder.build();
+        // ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback()
+        // {
+        // /**
+        // * Called when the framework connects and has declared a new network ready for use.
+        // * This callback may be called more than once if the {@link Network} that is
+        // * satisfying the request changes.
+        // */
+        // @TargetApi(Build.VERSION_CODES.M)
+        // @Override
+        // public void onAvailable(Network network) {
+        // super.onAvailable(network);
+        // Log.i("test", "已根据功能和传输类型找到合适的网络" + network.toString());
+        //
+        // NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
+        // if (networkInfo.getState() != null && NetworkInfo.State.CONNECTED ==
+        // networkInfo.getState()) {
+        // KLog.d("手机网络连接成功！");
+        // }
+        // // 只要一找到符合条件的网络就注销本callback
+        // // 你也可以自己进行定义注销的条件
+        // connectivityManager.unregisterNetworkCallback(this);
+        //
+        // // 通过network.openConnection 来获取URLConnection
+        // try {
+        // HttpURLConnection urlConnection = (HttpURLConnection) network.openConnection(new
+        // URL("http://www.baidu.com/s?wd=123"));
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
+        //
+        // // 或者 raw Socket
+        // // network.bindSocket(...);
+        // }
+        // };
+        // connectivityManager.registerNetworkCallback(request, callback);
+        // connectivityManager.requestNetwork(request, callback);
+        // }
 
     }
 
@@ -198,5 +252,305 @@ public class PhoneInfoActivity extends BaseActivity {
             }
         }
         return "";
+    }
+
+    public String getAllImei(Context context) {
+        try {
+            int simId_1 = 0;
+            int simId_2 = 1;
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            Class<?> ct = Class.forName("android.telephony.TelephonyManager");
+            Method md = ct.getMethod("getDeviceId", int.class);
+            String imei_1 = (String) md.invoke(tm, simId_1);
+            String imei_2 = (String) md.invoke(tm, simId_2);
+            return imei_1 + "," + imei_2;
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
+    public void initQualcommDoubleSim() {
+        try {
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            Class<?> cx = Class.forName("android.telephony.MSimTelephonyManager");
+
+            Class<?> ct = Class.forName("android.telephony.TelephonyManager");
+
+            Object obj = getSystemService("phone_msim");
+            Integer simId_1 = 0;
+            Integer simId_2 = 1;
+
+            Method mx = cx.getMethod("getDataState");
+            // int stateimei_1 = (Integer) mx.invoke(cx.newInstance());
+            int stateimei_2 = tm.getDataState();
+            Method mde = cx.getMethod("getDefault");
+            Method md = ct.getMethod("getDeviceId", int.class);
+            Method ms = cx.getMethod("getSubscriberId", int.class);
+            Method mp = cx.getMethod("getPhoneType");
+
+            // Object obj = mde.invoke(cx);
+
+            String imei_1 = (String) md.invoke(tm, simId_1);
+            KLog.d("imei_1:" + imei_1);
+            String imei_2 = (String) md.invoke(tm, simId_2);
+            KLog.d("imei_2:" + imei_2);
+
+            String imsi_1 = (String) ms.invoke(obj, simId_1);
+            String imsi_2 = (String) ms.invoke(obj, simId_2);
+
+            int statephoneType_1 = tm.getDataState();
+            int statephoneType_2 = (Integer) mx.invoke(obj);
+            Log.e("tag", statephoneType_1 + "---" + statephoneType_2);
+
+            // Class<?> msc = Class.forName("android.telephony.MSimSmsManager");
+            // for (Method m : msc.getMethods()) {
+            // if (m.getName().equals("sendTextMessage")) {
+            // m.getParameterTypes();
+            // }
+            // Log.e("tag", m.getName());
+            // }
+
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    private void printAllMethods(Class cls, TelephonyUtils telephonyUtils) {
+        Method[] method = cls.getDeclaredMethods();
+        System.out.println("getDeclaredMethods():获取所有的权限修饰符修饰的Method");
+        for (Method m : method) {
+            System.out.println("Method Name = " + m.getName());
+            Class<?>[] parameterTypes = m.getParameterTypes();
+            if (parameterTypes.length >= 1) {
+                try {
+                    KLog.d("Method Name = " + m.getName());
+                    KLog.d(m.invoke(telephonyUtils, telephonyUtils.getSubId1()) + "," + m.invoke(telephonyUtils, telephonyUtils.getSubId2()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("*****************************");
+        }
+        System.out.println();
+    }
+
+
+    void printAllFileds(Class cls) {
+        Field[] field = cls.getDeclaredFields();
+        System.out.println("getFields():获取所有权限修饰符修饰的字段");
+        for (Field f : field) {
+            System.out.println("Field Name = " + f.getName());
+            System.out.println("Class Name = " + f.getType().getName());
+        }
+        System.out.println();
+    }
+
+
+    private void initMtkDoubleSim() {
+        try {
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            Class<?> c = Class.forName("com.android.internal.telephony.Phone");
+            // printAllFileds(c);
+            // printAllMethods(c);
+            //
+            // printAllMethods(TelephonyManager.class);
+
+            // Field fields1 = c.getField("GEMINI_SIM_1");
+            // fields1.setAccessible(true);
+            // Integer simId_1 = (Integer) fields1.get(null);
+            // Field fields2 = c.getField("GEMINI_SIM_2");
+            // fields2.setAccessible(true);
+            // Integer simId_2 = (Integer) fields2.get(null);
+            int simId_1 = 0;
+            int simId_2 = 1;
+
+            Method m1 = TelephonyManager.class.getDeclaredMethod("getDeviceId", int.class);
+            String imei_1 = (String) m1.invoke(tm, simId_1);
+            KLog.d("imei_1:" + imei_1);
+            String imei_2 = (String) m1.invoke(tm, simId_2);
+            KLog.d("imei_2:" + imei_2);
+
+
+            Method m = TelephonyManager.class.getDeclaredMethod("getSubscriberId", int.class);
+            String imsi_1 = (String) m.invoke(tm, simId_1);
+            KLog.d("imsi_1:" + imsi_1);
+            String imsi_2 = (String) m.invoke(tm, simId_2);
+            KLog.d("imsi_2:" + imsi_2);
+
+
+            Method mx = TelephonyManager.class.getDeclaredMethod("getPhoneTypeGemini", Integer.class);
+            Integer phoneType_1 = (Integer) mx.invoke(tm, simId_1);
+            Integer phoneType_2 = (Integer) mx.invoke(tm, simId_2);
+
+            if (TextUtils.isEmpty(imsi_1) && (!TextUtils.isEmpty(imsi_2))) {
+            }
+            if (TextUtils.isEmpty(imsi_2) && (!TextUtils.isEmpty(imsi_1))) {
+            }
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+
+    private void initMtkSecondDoubleSim() {
+        try {
+            Integer simId_1;
+            Integer simId_2;
+            TelephonyManager tm = null;
+            try {
+                tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                Class<?> c = Class.forName("com.android.internal.telephony.Phone");
+                Field fields1 = c.getField("GEMINI_SIM_1");
+                fields1.setAccessible(true);
+                simId_1 = (Integer) fields1.get(null);
+                Field fields2 = c.getField("GEMINI_SIM_2");
+                fields2.setAccessible(true);
+                simId_2 = (Integer) fields2.get(null);
+            } catch (Exception e) {
+                simId_1 = 0;
+                simId_2 = 1;
+            }
+
+            Method mx = TelephonyManager.class.getMethod("getDefault", int.class);
+            TelephonyManager tm1 = (TelephonyManager) mx.invoke(tm, simId_1);
+            TelephonyManager tm2 = (TelephonyManager) mx.invoke(tm, simId_2);
+
+
+            String imsi_1 = tm1.getSubscriberId();
+            String imsi_2 = tm2.getSubscriberId();
+
+            String imei_1 = tm1.getDeviceId();
+            String imei_2 = tm2.getDeviceId();
+
+            // phoneType_1 = tm1.getPhoneType();
+            // phoneType_2 = tm2.getPhoneType();
+
+            if (TextUtils.isEmpty(imsi_1) && (!TextUtils.isEmpty(imsi_2))) {
+            }
+            if (TextUtils.isEmpty(imsi_2) && (!TextUtils.isEmpty(imsi_1))) {
+            }
+
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+    public String getSimIccId(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) { // 大于等于Android 5.1.0 L版本
+            SubscriptionManager sub = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+            List<SubscriptionInfo> info = sub.getActiveSubscriptionInfoList();
+            int count = sub.getActiveSubscriptionInfoCount();
+            if (count > 0) {
+                if (count > 1) {
+                    String icc1 = info.get(0).getIccId();
+                    String icc2 = info.get(1).getIccId();
+                    return icc1 + "," + icc2;
+                } else {
+                    for (SubscriptionInfo list : info) {
+                        String icc1 = list.getIccId();
+                        KLog.d("list.getSubscriptionId():" + list.getSubscriptionId());
+                        return icc1;
+                    }
+                }
+            } else {
+                return "";
+            }
+        } else {
+            // 小于5.1.0 以下的版本
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            return tm.getSimSerialNumber();
+        }
+        return "";
+    }
+
+    public static Class[] getMethodParamTypes(Class cls, String methodName) throws ClassNotFoundException {
+        Class[] params = null;
+        try {
+            Method[] methods = cls.getDeclaredMethods();
+            for (int i = 0; i < methods.length; i++) {
+                if (methodName.equals(methods[i].getName())) {// 和传入方法名匹配
+                    params = methods[i].getParameterTypes();
+                    if (params.length >= 1) {
+                        KLog.d("length:" + params.length);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return params;
+    }
+
+    public static String getPhoneImsiNum(Context context) {
+        int subId1 = -1;
+        int subId2 = -1;
+        String imsi1 = null;
+        String imsi2 = null;
+        try {
+            TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Method getSubscriberId = null;
+                Method getSimOperator = null;
+                try {
+                    getSubscriberId = tManager.getClass().getMethod("getSubscriberId", getMethodParamTypes(tManager.getClass(), "getSubscriberId"));
+                } catch (Exception e) {
+
+                }
+
+                try {
+                    getSimOperator = tManager.getClass().getMethod("getSimOperator", getMethodParamTypes(tManager.getClass(), "getSimOperator"));
+                } catch (Exception e) {
+
+                }
+
+                subId1 = getSubId(0, context);
+                subId2 = getSubId(1, context);
+
+                if (subId1 > 0) {
+                    imsi1 = (String) getSubscriberId.invoke(tManager, subId1);
+                }
+                if (subId2 > 0) {
+                    imsi2 = (String) getSubscriberId.invoke(tManager, subId2);
+                }
+
+                if (!TextUtils.isEmpty(imsi1) && !TextUtils.isEmpty(imsi2)) {
+                    return imsi1 + "," + imsi2;
+                } else {
+                    if (!TextUtils.isEmpty(imsi1)) {
+                        return imsi1;
+                    } else {
+                        return imsi2;
+                    }
+                }
+            } else {
+                // Android 5.0以下的api获取ismi方法 sdk < 21
+                return tManager.getSubscriberId();
+            }
+        } catch (Exception e) {
+        }
+        return "";
+    }
+
+    public static int getSubId(int simid, Context context) {
+        Uri uri = Uri.parse("content://telephony/siminfo");
+        Cursor cursor = null;
+        ContentResolver contentResolver = context.getContentResolver();
+        try {
+            cursor = contentResolver.query(uri, new String[] {"_id", "sim_id"}, "sim_id = ?", new String[] {String.valueOf(simid)}, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    return cursor.getInt(cursor.getColumnIndex("_id"));
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+        return -1;
     }
 }

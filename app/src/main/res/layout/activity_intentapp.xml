@@ -4,6 +4,7 @@
             android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ll_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -163,5 +164,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="花椒直播"/>
+
+        <Button
+            android:id="@+id/btn_360service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="360Service"/>
+
+        <Button
+            android:id="@+id/btn_360activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="360Activity"/>
     </LinearLayout>
 </ScrollView>

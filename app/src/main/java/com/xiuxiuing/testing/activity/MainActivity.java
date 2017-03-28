@@ -1,8 +1,17 @@
 package com.xiuxiuing.testing.activity;
 
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
+
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -23,17 +32,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.xiuxiuing.testing.R;
-import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
-import com.xiuxiuing.testing.service.MainService;
-
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -61,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(this, MainService.class);
-        startService(intent);
+        // Intent intent = new Intent(this, MainService.class);
+        // startService(intent);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_main);
-        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE}, 0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar bar = getSupportActionBar();
