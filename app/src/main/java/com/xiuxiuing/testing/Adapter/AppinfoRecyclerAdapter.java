@@ -33,7 +33,7 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
         PackageManager pm = mContext.getPackageManager();
         List<PackageInfo> packageInfos = pm.getInstalledPackages(0);
         for (PackageInfo packageInfo : packageInfos) {
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+            if (true || (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 AppInfo info = new AppInfo();
                 info.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
                 info.setPkgName(packageInfo.packageName);
@@ -57,6 +57,7 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         holder.tvAppName.setText(appInfos.get(position).getAppName());
+        holder.tvAppVersion.setText(appInfos.get(position).getVersionName());
         holder.tvAppPkg.setText(appInfos.get(position).getPkgName());
         holder.tvAppSign.setText(appInfos.get(position).getSign());
         holder.ivAppIcon.setImageDrawable(appInfos.get(position).getAppIcon());
@@ -88,12 +89,14 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
         TextView tvAppName;
         TextView tvAppPkg;
         TextView tvAppSign;
+        TextView tvAppVersion;
         ImageView ivAppIcon;
 
         public MainViewHolder(View itemView) {
             super(itemView);
             cvItem = (CardView) itemView.findViewById(R.id.cv_appinfo_item);
             tvAppName = (TextView) itemView.findViewById(R.id.tv_appname);
+            tvAppVersion = (TextView) itemView.findViewById(R.id.tv_appversion);
             tvAppPkg = (TextView) itemView.findViewById(R.id.tv_apppkg);
             tvAppSign = (TextView) itemView.findViewById(R.id.tv_appsign);
             ivAppIcon = (ImageView) itemView.findViewById(R.id.iv_appicon);

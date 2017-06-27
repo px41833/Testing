@@ -1,5 +1,8 @@
 package com.xiuxiuing.testing.activity;
 
+import com.socks.library.KLog;
+import com.xiuxiuing.testing.R;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -12,9 +15,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
-import com.socks.library.KLog;
-import com.xiuxiuing.testing.R;
 
 /**
  * Created by wang on 16/6/16.
@@ -52,17 +52,17 @@ public class LocationActivity extends BaseActivity {
         // return;
         // }
 
-        //
-        // try {
-        // location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        // Log.i(TAG, "经度：" + location.getLongitude());
-        // Log.i(TAG, "纬度：" + location.getLatitude());
-        // Log.i(TAG, "海拔：" + location.getAltitude());
-        // Log.i(TAG, "精确度:" + location.getAccuracy());
-        // Log.i(TAG, "速度:" + location.getSpeed());
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
+
+        try {
+            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Log.i(TAG, "经度：" + location.getLongitude());
+            Log.i(TAG, "纬度：" + location.getLatitude());
+            Log.i(TAG, "海拔：" + location.getAltitude());
+            Log.i(TAG, "精确度:" + location.getAccuracy());
+            Log.i(TAG, "速度:" + location.getSpeed());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //
         // try {
         // location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);

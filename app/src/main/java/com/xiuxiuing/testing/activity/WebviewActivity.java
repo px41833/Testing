@@ -55,7 +55,7 @@ public class WebviewActivity extends BaseActivity {
 
         webView.requestFocus();
         // webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
-        webView.loadUrl("http://v.youku.com/v_show/id_XMjQ5OTI2MDc4MA==.html?x&sharefrom=android");
+        webView.loadUrl("http://www.baidu.com");
         webView.setWebViewClient(client);
         webView.setWebChromeClient(chromeClient);
         webView.setDownloadListener(new MyDownloadListenter());

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Testing</string>
+    <string name="app_name">工具包</string>
     <string name="action_settings">Settings</string>
 
     <string name="title_wifi_manager">Wifi信息管理</string>
@@ -14,8 +14,8 @@
     <string name="title_android_webview">WebView使用</string>
     <string name="desc_android_webview">WebView使用详情</string>
 
-    <string name="title_android_openappstore">跳转应用市场</string>
-    <string name="desc_android_openappstore">跳转应用市场</string>
+    <string name="title_android_openappstore">DeepLink协议跳转</string>
+    <string name="desc_android_openappstore">测试DeepLink协议是否有效</string>
 
     <string name="title_android_phoneinfo">手机信息</string>
     <string name="desc_android_phoneinfo">获取手机各种硬件标识,系统版本等</string>
@@ -23,14 +23,17 @@
     <string name="title_android_customview">自定义View</string>
     <string name="desc_android_customview">自定义View用法</string>
 
-    <string name="title_android_appinfo">AppInfo</string>
-    <string name="desc_android_appinfo">App相关信息</string>
+    <string name="title_android_appinfo">App信息</string>
+    <string name="desc_android_appinfo">获取安装应用的包名、签名</string>
 
     <string name="title_android_youmi">YouMi广告</string>
     <string name="desc_android_youmi">YouMi广告展示</string>
 
     <string name="title_android_system">系统开关设置</string>
     <string name="desc_android_system">Android 系统开关，wifi、手电筒等的开关</string>
+
+    <string name="title_android_smssdk">SMSSDK</string>
+    <string name="desc_android_smssdk">SMSSDK短信验证</string>
 
     <string name="desc">微信红包</string>
 </resources>

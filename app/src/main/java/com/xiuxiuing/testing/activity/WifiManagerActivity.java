@@ -62,7 +62,7 @@ public class WifiManagerActivity extends BaseActivity {
         //
         // tvHello.setText(sb);
         getWifiList(this);
-        getConfiguration(this);
+        System.out.println("Config: " + getConfiguration(this));
 
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();

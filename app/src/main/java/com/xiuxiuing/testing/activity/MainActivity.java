@@ -7,11 +7,13 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.oneapm.agent.android.OneApmAgent;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -86,6 +88,19 @@ public class MainActivity extends AppCompatActivity {
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
+
+        OneApmAgent.init(this.getApplicationContext()).setToken("F499DCF069732D0314790B17375DDEBC44").start();
+        // IntentFilter filter = new IntentFilter();
+        // filter.addAction(Intent.ACTION_SCREEN_OFF);
+        // registerReceiver(new TestReceiver(), filter);
+
+
+        Intent intent = new Intent();
+        intent.setAction("com.getui.gy.action");
+        intent.putExtra("code", 10006);
+        intent.putExtra("msg", "hehehe");
+        // intent.setPackage("com.gysdk.demo");
+        sendBroadcast(intent);
 
         // hello = (TextView) findViewById(R.id.hello);
         //

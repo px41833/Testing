@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.socks.library.KLog;
 import com.xiuxiuing.testing.data.Consts;
 import com.xiuxiuing.testing.utils.PackageInfoUtils;
 import com.xiuxiuing.testing.utils.SharePreUtils;
@@ -88,6 +89,10 @@ public class StaticReceiver extends BroadcastReceiver {
                     Log.d(TAG, "关闭WiFi");
                     break;
             }
+        }
+
+        if (action.equals(Intent.ACTION_SCREEN_OFF)){
+            KLog.d("hei ping le");
         }
     }
 }

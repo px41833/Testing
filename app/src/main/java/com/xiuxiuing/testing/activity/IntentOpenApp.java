@@ -1,5 +1,9 @@
 package com.xiuxiuing.testing.activity;
 
+import com.socks.library.KLog;
+import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.utils.ToastUtils;
+
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,32 +11,41 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
-
-import com.socks.library.KLog;
-import com.xiuxiuing.testing.R;
+import android.widget.EditText;
 
 /**
  * Created by wang on 16/5/6.
  */
 public class IntentOpenApp extends BaseActivity implements View.OnClickListener {
     Context mContext;
+    EditText etUri;
+    EditText etPkg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mContext = this;
+        setTitle(R.string.title_android_openappstore);
         setContentView(R.layout.activity_intentapp);
+        etUri = (EditText) findViewById(R.id.et_uri);
+        etPkg = (EditText) findViewById(R.id.et_pkg);
+
+        findViewById(R.id.btn_start).setOnClickListener(this);
+        findViewById(R.id.btn_jingdong).setOnClickListener(this);
+        findViewById(R.id.btn_yingyongbao).setOnClickListener(this);
         findViewById(R.id.btn_douyu).setOnClickListener(this);
         findViewById(R.id.btn_panda).setOnClickListener(this);
         findViewById(R.id.btn_huya).setOnClickListener(this);
         findViewById(R.id.btn_longzhu).setOnClickListener(this);
         findViewById(R.id.btn_quanmin).setOnClickListener(this);
-        findViewById(R.id.btn_yingyongbao).setOnClickListener(this);
+
         findViewById(R.id.btn_360zhushou).setOnClickListener(this);
         findViewById(R.id.btn_sinagame).setOnClickListener(this);
         findViewById(R.id.btn_getui).setOnClickListener(this);
-        findViewById(R.id.btn_jingdong).setOnClickListener(this);
+
         findViewById(R.id.btn_ifeng).setOnClickListener(this);
         findViewById(R.id.btn_damai).setOnClickListener(this);
         findViewById(R.id.btn_qqlive).setOnClickListener(this);
@@ -57,7 +70,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
         // startIntent("taobao://a.m.taobao.com/i524638533701.htm", "com.taobao.taobao",
         // "com.taobao.tao.detail.activity.DetailActivity");
-        startTmallShop();
+        // startTmallShop();
 
         // try {
         // Intent intent = new Intent();
@@ -74,6 +87,9 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_start:
+                startIntent();
+                break;
             case R.id.btn_douyu:
                 gotoDouyu(mContext);
                 break;
@@ -90,7 +106,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
                 gotoQuanMin(mContext);
                 break;
             case R.id.btn_yingyongbao:
-                goToYingYongBaoMarket(mContext, "com.UCMobile");
+                goToYingYongBaoMarket(mContext, "com.huajiao");
                 break;
             case R.id.btn_360zhushou:
                 goTo360ZhuShouMarket(mContext, "com.UCMobile");
@@ -234,13 +250,27 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     }
 
     public void gotoDamai() {
-        Uri uri = Uri.parse("dmextension://page1/code?code=113233");
+        Uri uri = Uri.parse("dmextension://page1/code?utm_source=damai&utm_medium=msite&utm_campaign=translink_120156&code=120156");
         Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_MAIN);
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setClassName("cn.damai", "cn.damai.activity.ProjectDetailActivity");
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClassName("cn.damai", "cn.damai.newtradeorder.ui.projectdetail.ui.activity.SchemeActivity");
         intent.setData(uri);
         System.out.println(intent.toURI().toString());
         mContext.startActivity(intent);
+
+        // try {
+        // Intent intent1 =
+        // Intent.parseUri("dmextension://page1/code?utm_source=damai&utm_medium=msite&utm_campaign=translink_120156&code=120156",
+        // 0);
+        // mContext.startActivity(intent1);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
     }
 
     public void gotoIqiyi() {
@@ -333,7 +363,8 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         Uri uri = Uri.parse("tbopen://air.tv.douyu/index.html?room_id=228866&isVertical=0");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setClassName("air.tv.douyu.android", "tv.douyu.view.activity.MainActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // intent.setClassName("air.tv.douyu.android", "tv.douyu.view.activity.MainActivity");
         intent.setData(uri);
         System.out.println(intent.toURI().toString());
         context.startActivity(intent);
@@ -352,13 +383,13 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         // dat=yykiwi://channel?sid=77259038&subSid=2535706816
         Intent intent = null;
         try {
-            // intent = new Intent();
-            // intent.setAction(Intent.ACTION_VIEW);
-            // Uri uri =
-            // Uri.parse("#Intent;component=com.duowan.kiwi/com.duowan.kiwi.channelpage.ChannelPage;l.subSid=2535706816;l.sid=77259038;end");
-            // intent.setData(uri);
-            intent = Intent
-                    .parseUri("#Intent;component=com.duowan.kiwi/com.duowan.kiwi.channelpage.ChannelPage;l.subSid=2535706816;l.sid=77259038;end", 0);
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("#Intent;component=com.duowan.kiwi/com.duowan.kiwi.channelpage.ChannelPage;l.subSid=2535706816;l.sid=77259038;end");
+            intent.setData(uri);
+            // intent = Intent.parseUri(
+            // "pp://www.25pp.com/down?packagename=com.woqutz.didi&appid=6702146&ch=#Intent;launchFlags=0x10000000;component=com.pp.assistant/.activity.PPExternalDialogActivity;end",
+            // 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -428,11 +459,29 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         // startIntent("tpmast://appdetails?pname=" + packageName +
         // "&versioncode=0&oplist=1&via=ANDROIDQQ.YYB.SHARESOURCE&request_type=1",
         // "com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
-        startIntent("market://details?action=1&id=" + packageName, "com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
+
+        try {
+            // Intent intent = Intent.parseUri(
+            // "tpmast://appdetails?pname=com.huajiao&versioncode=0&oplist=1&via=ANDROIDQQ.YYB.SHARESOURCE&request_type=1#Intent;launchFlags=0x10000000;component=com.tencent.android.qqdownloader/com.tencent.pangu.link.LinkProxyActivity;end",
+            // 0);
+            Uri uri = Uri.parse("https://a.vmall.com?id=com.happyelements.AndroidAnimal");
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // intent.setClassName("com.tencent.android.qqdownloader",
+            // "com.tencent.assistant.activity.BrowserActivity");
+            intent.setData(uri);
+            intent.setPackage("com.huawei.appmarket");
+            KLog.e("START u0:" + intent.toURI().toString());
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void goTo360ZhuShouMarket(Context context, String packageName) {
-        startIntent("market://details?id=com.UCMobile", "com.qihoo.appstore", "com.qihoo.appstore.distribute.SearchDistributionActivity");
+        startIntent("market://details?oplist=1&action=1&id=com.UCMobile", "com.qihoo.appstore",
+                "com.qihoo.appstore.distribute.SearchDistributionActivity");
         // Uri uri = Uri.parse("market://details?id=" + packageName);
         // Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // try {
@@ -491,6 +540,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
                 "openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"m\",\"sourceValue\":\"sourceValue_gtDQ\",\"sourceType\":\"sourceType_gtDQ\",\"url\":\"https://item.m.jd.com/product/3772942.html\"}");
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         System.out.println(intent.toURI().toString());
 
 
@@ -502,8 +552,9 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         Intent uri = null;
         try {
             uri = Intent.parseUri(
-                    "#Intent;package=com.ifeng.news2;component=com.ifeng.news2/.activity.DetailActivity;S.extra.com.ifeng.news2.id=030010050602229;end",
+                    "pp://www.25pp.com/down?packagename=&appid=46527&ch=#Intent;launchFlags=0x10000000;component=com.pp.assistant/.activity.PPExternalDialogActivity;end",
                     0);
+            uri.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             System.out.println(uri.toURI().toString());
             startActivity(uri);
         } catch (Exception e) {
@@ -516,29 +567,65 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     public void start360Service() {
         Intent intent = new Intent();
-        intent.putExtra("p_from", 10001);
-        intent.setClassName("com.qihoo360.mobilesafe", "com.qihoo360.mobilesafe.service.helper.GuardHelperService");
+        intent.setAction("com.getui.gtc.sdk.service.action");
+        intent.setClassName("com.gysdk.demo", "com.getui.gtc.GtcService");
         System.out.println(intent.toURI().toString());
         startService(intent);
     }
 
     public void start360Activity() {
+        // Uri uri = Uri.parse("baidumap://map/cost_share?url=http://www.baidu.com");
+        Uri uri = Uri.parse("http://prom.m.gome.com.cn/html/prodhtml/topics/201704/26/sale9G0jY9WS99Y.html");
         Intent intent = new Intent();
-        intent.putExtra("from", 10001);
-        intent.setClassName("com.qihoo360.mobilesafe", "com.qihoo360.mobilesafe.support.ms.EmptyExitActivity");
-        System.out.println(intent.toURI().toString());
-        startActivity(intent);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClassName("com.gome.eshopnew", "com.gome.ecmall.wap.sales.WapSalesActivity");
+        intent.setData(uri);
+        KLog.e("START u0:" + intent.toURI().toString());
+        mContext.startActivity(intent);
     }
 
     public void startTmallShop() {
 
-        Uri uri = Uri.parse("bdvideo://invoke?intent=#Intent;action=com.baidu.search.video;component=com.baidu.video/.ui.ThirdInvokeActivtiy;S.refer=http://baidu.ku6.com/watch/07853306887093450973.html;S.vtype=normal;S.title=两美女床上互贴挑逗 血脉贲张;end");
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setData(uri);
-        KLog.e("START u0:" + intent.toURI().toString());
-        mContext.startActivity(intent);
+        try {
+            // Uri uri = Uri.parse("baidumap://map/cost_share?url=http://www.baidu.com");
+            Uri uri = Uri.parse("tmall://page.tm/webview?url=https://equity-vip.tmall.com/agent/mobile.htm?agentId=35927&_bind=true");
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // intent.setClassName("com.baidu.appsearch", "com.baidu.appsearch.UrlHandlerActivity");
+            intent.setData(uri);
+            KLog.e("START u0:" + intent.toURI().toString());
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startIntent() {
+        try {
+            Uri uri = Uri.parse(etUri.getText().toString());
+            KLog.e("START u0:" + uri.getSchemeSpecificPart().substring(2));
+            KLog.e("START u0 getPath:" + uri.getPath());
+            Intent intent = new Intent();
+//            intent.setAction(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            if (!TextUtils.isEmpty(etPkg.getText().toString())) {
+                intent.setPackage(etPkg.getText().toString());
+            }
+
+            intent.setClassName("com.tencent.mm", "com.tencent.mm.plugin.base.stub.WXEntryActivity");
+            intent.setData(uri);
+            KLog.e("START u0:" + intent.toURI().toString());
+            KLog.e("START u0 get data:" + intent.getDataString());
+
+            KLog.e("START u0 get Query:" + uri.getQuery());
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.showToastLong(mContext, "检查应用是否安装");
+        }
 
 
     }

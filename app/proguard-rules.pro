@@ -23,3 +23,12 @@
 -keep public class android.support.**{
     *;
 }
+
+-keep class org.apache.http.impl.client.**
+-dontwarn org.apache.commons.**
+-keep class com.blueware.** { *; }
+-dontwarn com.blueware.**
+-keep class com.oneapm.** {*;}
+-dontwarn com.oneapm.**
+-keepattributes Exceptions, Signature, InnerClasses
+-keepattributes SourceFile, LineNumberTable

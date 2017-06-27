@@ -1,9 +1,11 @@
 package com.xiuxiuing.testing.activity;
 
-import android.app.Application;
-
 import com.socks.library.KLog;
 import com.xiuxiuing.testing.BuildConfig;
+
+import android.app.Application;
+
+import cn.smssdk.SMSSDK;
 
 /**
  * Created by wang on 16/12/8.

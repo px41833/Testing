@@ -7,6 +7,7 @@ import com.xiuxiuing.testing.activity.CustomViewActivity;
 import com.xiuxiuing.testing.activity.IntentOpenApp;
 import com.xiuxiuing.testing.activity.LocationActivity;
 import com.xiuxiuing.testing.activity.PhoneInfoActivity;
+import com.xiuxiuing.testing.activity.SmsSdkActivity;
 import com.xiuxiuing.testing.activity.SystemSwitchActivity;
 import com.xiuxiuing.testing.activity.WebviewActivity;
 import com.xiuxiuing.testing.activity.WiFiSdkActivity;
@@ -26,7 +27,8 @@ import android.widget.TextView;
  * Created by wang on 16/5/23.
  */
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MainViewHolder> {
-    private final ItemInfo[] itemInfos = {new ItemInfo(R.string.title_wifi_manager, R.string.desc_wifi_manager, WifiManagerActivity.class),
+    private final ItemInfo[] itemInfos = {
+            new ItemInfo(R.string.title_wifi_manager, R.string.desc_wifi_manager, WifiManagerActivity.class),
             new ItemInfo(R.string.title_wifi_share, R.string.desc_wifi_share, WiFiSdkActivity.class),
             new ItemInfo(R.string.title_android_location, R.string.desc_android_location, LocationActivity.class),
             new ItemInfo(R.string.title_android_webview, R.string.desc_android_webview, WebviewActivity.class),
@@ -35,7 +37,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             new ItemInfo(R.string.title_android_customview, R.string.desc_android_customview, CustomViewActivity.class),
             new ItemInfo(R.string.title_android_appinfo, R.string.desc_android_appinfo, AppinfoActivity.class),
             new ItemInfo(R.string.title_android_youmi, R.string.desc_android_youmi, AdYiMiActivity.class),
-            new ItemInfo(R.string.title_android_system, R.string.desc_android_system, SystemSwitchActivity.class)};
+            new ItemInfo(R.string.title_android_smssdk, R.string.desc_android_smssdk, SmsSdkActivity.class),
+            new ItemInfo(R.string.title_android_system, R.string.desc_android_system, SystemSwitchActivity.class)
+    };
 
     private Context mContext;
 

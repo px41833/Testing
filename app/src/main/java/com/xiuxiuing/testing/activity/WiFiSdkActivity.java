@@ -227,7 +227,7 @@ public class WiFiSdkActivity extends BaseActivity {
                 System.out.println("静态ip设置失败！");
                 Toast.makeText(this, "静态ip设置失败", Toast.LENGTH_SHORT).show();
             }
-        } else if (Build.VERSION.SDK_INT < 24) {
+        } else if (Build.VERSION.SDK_INT < 27) {
             try {
 
                 Object ipConfiguration = Class.forName("android.net.IpConfiguration").newInstance();
@@ -330,7 +330,7 @@ public class WiFiSdkActivity extends BaseActivity {
                 wm.saveConfiguration();
 
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
 

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.NetworkInterface;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,109 +39,50 @@ public class PhoneInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phoneinfo);
-        StringBuilder sb = new StringBuilder();
-
         tvPhone = (TextView) findViewById(R.id.phoneifno);
-        // tvPhone.setText(getBuild() + getDeviceInfo());
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        sb.append("imei:").append(tm.getDeviceId()).append("\n");
-        KLog.d("imei:" + tm.getDeviceId());
-        KLog.d("imsi:" + tm.getSubscriberId());
-        sb.append("imsi:").append(tm.getSubscriberId()).append("\n");
-
         TelephonyUtils telephonyUtils = new TelephonyUtils(this);
-        int subid1 = telephonyUtils.getSubId1();
-        int subid2 = telephonyUtils.getSubId2();
-        KLog.d("subid1:" + subid1);
+
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbString = new StringBuilder();
+
         sb.append("subid1:").append(telephonyUtils.getSubId1()).append("\n");
-        KLog.d("subid2:" + subid2);
-        sb.append("subid2:").append(telephonyUtils.getSubId2()).append("\n");
+        sb.append("subid2:").append(telephonyUtils.getSubId2()).append("\n\n");
 
-        sb.append("imei1:").append(telephonyUtils.getDeviced1()).append("\n");
-        sb.append("imei2:").append(telephonyUtils.getDeviced2()).append("\n");
-        sb.append("imsi1:").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId1())).append("\n");
-        sb.append("imsi2:").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId2())).append("\n");
+        sb.append("imei:  ").append(tm.getDeviceId()).append("\n");
+        sb.append("imei1: ").append(telephonyUtils.getDeviced1()).append("\n");
+        sb.append("imei2: ").append(telephonyUtils.getDeviced2()).append("\n\n");
+
+        sbString.append(tm.getDeviceId()).append(" ").append(telephonyUtils.getDeviced1()).append(" ").append(telephonyUtils.getDeviced2())
+                .append(" ");
+
+
+        sb.append("imsi:  ").append(tm.getSubscriberId()).append("\n");
+        sb.append("imsi1: ").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId1())).append("\n");
+        sb.append("imsi2: ").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId2())).append("\n\n");
+
+        sbString.append(tm.getSubscriberId()).append(" ").append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId1())).append(" ")
+                .append(telephonyUtils.getSubscriberId(telephonyUtils.getSubId2())).append(" ");
+
+        sb.append("iccid: ").append(tm.getSimSerialNumber()).append("\n");
         sb.append("iccid1:").append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId1())).append("\n");
-        sb.append("iccid2:").append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId2())).append("\n");
+        sb.append("iccid2:").append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId2())).append("\n\n");
 
-        sb.append("num1:").append(telephonyUtils.getLine1NumberForSubscriber(telephonyUtils.getSubId1())).append("\n");
-        sb.append("num2:").append(telephonyUtils.getLine1NumberForSubscriber(telephonyUtils.getSubId2())).append("\n");
+        sbString.append(tm.getSimSerialNumber()).append(" ").append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId1())).append(" ")
+                .append(telephonyUtils.getSimSerialNumber(telephonyUtils.getSubId2())).append("\n\n");
+
+        sb.append("num:   ").append(tm.getLine1Number()).append("\n");
+        sb.append("num1:  ").append(telephonyUtils.getLine1NumberForSubscriber(telephonyUtils.getSubId1())).append("\n");
+        sb.append("num2:  ").append(telephonyUtils.getLine1NumberForSubscriber(telephonyUtils.getSubId2())).append("\n");
+
+        sb.append(new String(Character.toChars(0x1F602)));
 
         tvPhone.setText(sb.toString());
-        // printAllMethods(telephonyUtils.getClass(), telephonyUtils);
-        //
-        // KLog.d(telephonyUtils.getSimSerialNumber(subid1) + "," +
-        // telephonyUtils.getSimSerialNumber(subid2));
-        // KLog.d(telephonyUtils.getCurrentPhoneType(subid1) + "," +
-        // telephonyUtils.getCurrentPhoneType(subid2));
-        // KLog.d(telephonyUtils.getDataNetworkType(subid1) + "," +
-        // telephonyUtils.getDataNetworkType(subid2));
-        // KLog.d(telephonyUtils.getLine1NumberForSubscriber(subid1) + "," +
-        // telephonyUtils.getLine1NumberForSubscriber(subid2));
-        // KLog.d(telephonyUtils.getNetworkOperatorForSubscription(subid1) + "," +
-        // telephonyUtils.getNetworkOperatorForSubscription(subid2));
+        KLog.d(sb.toString());
+        Log.d("tag", sb.toString());
+        Log.d("tag", sbString.toString());
 
-
-        // initQualcommDoubleSim();
-        // initMtkDoubleSim();
-        // initMtkSecondDoubleSim();
-        // getPhoneImsiNum(this);
-        //
-        // getSimIccId(this);
-
-
-        // if (Build.VERSION.SDK_INT >= 21) {
-        // final ConnectivityManager connectivityManager = (ConnectivityManager)
-        // this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        // NetworkRequest.Builder builder = new NetworkRequest.Builder();
-        //
-        // // 设置指定的网络传输类型(蜂窝传输) 等于手机网络
-        // builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-        //
-        // // 设置感兴趣的网络功能
-        // // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        //
-        // // 设置感兴趣的网络：计费网络
-        // // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-        //
-        // NetworkRequest request = builder.build();
-        // ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback()
-        // {
-        // /**
-        // * Called when the framework connects and has declared a new network ready for use.
-        // * This callback may be called more than once if the {@link Network} that is
-        // * satisfying the request changes.
-        // */
-        // @TargetApi(Build.VERSION_CODES.M)
-        // @Override
-        // public void onAvailable(Network network) {
-        // super.onAvailable(network);
-        // Log.i("test", "已根据功能和传输类型找到合适的网络" + network.toString());
-        //
-        // NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
-        // if (networkInfo.getState() != null && NetworkInfo.State.CONNECTED ==
-        // networkInfo.getState()) {
-        // KLog.d("手机网络连接成功！");
-        // }
-        // // 只要一找到符合条件的网络就注销本callback
-        // // 你也可以自己进行定义注销的条件
-        // connectivityManager.unregisterNetworkCallback(this);
-        //
-        // // 通过network.openConnection 来获取URLConnection
-        // try {
-        // HttpURLConnection urlConnection = (HttpURLConnection) network.openConnection(new
-        // URL("http://www.baidu.com/s?wd=123"));
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        //
-        // // 或者 raw Socket
-        // // network.bindSocket(...);
-        // }
-        // };
-        // connectivityManager.registerNetworkCallback(request, callback);
-        // connectivityManager.requestNetwork(request, callback);
-        // }
+        KLog.d("MAC:" + getMacAddress());
 
     }
 
@@ -552,5 +495,34 @@ public class PhoneInfoActivity extends BaseActivity {
             }
         }
         return -1;
+    }
+
+    public static String getMacAddress() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) {
+                    continue;
+                }
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(String.format("%02X:", b));
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception ex) {
+            KLog.d(ex.getLocalizedMessage());
+        }
+        return "02:00:00:00:00:00";
     }
 }
