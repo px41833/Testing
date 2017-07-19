@@ -4,4 +4,16 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <CheckBox
+        android:id="@+id/cb_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GroupSummary"/>
+
+    <Button
+        android:id="@+id/btn_noti1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="通知1"/>
+
 </LinearLayout>

@@ -15,6 +15,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import java.util.HashMap;
+
 /**
  * Created by wang on 16/5/6.
  */
@@ -32,6 +34,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_intentapp);
         etUri = (EditText) findViewById(R.id.et_uri);
         etPkg = (EditText) findViewById(R.id.et_pkg);
+
 
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_jingdong).setOnClickListener(this);
@@ -461,36 +464,43 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
         // "com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
 
         try {
-            // Intent intent = Intent.parseUri(
-            // "tpmast://appdetails?pname=com.huajiao&versioncode=0&oplist=1&via=ANDROIDQQ.YYB.SHARESOURCE&request_type=1#Intent;launchFlags=0x10000000;component=com.tencent.android.qqdownloader/com.tencent.pangu.link.LinkProxyActivity;end",
-            // 0);
-            Uri uri = Uri.parse("https://a.vmall.com?id=com.happyelements.AndroidAnimal");
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Intent intent = new Intent("android.intent.action.VIEW");
+
+            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // intent.addCategory(Intent.CATEGORY_BROWSABLE);
+
+            // if (!TextUtils.isEmpty(etPkg.getText().toString())) {
+            // intent.setPackage(etPkg.getText().toString());
+            // }
+            // intent.setPackage("com.tencent.android.qqdownloader");
             // intent.setClassName("com.tencent.android.qqdownloader",
-            // "com.tencent.assistant.activity.BrowserActivity");
-            intent.setData(uri);
-            intent.setPackage("com.huawei.appmarket");
-            KLog.e("START u0:" + intent.toURI().toString());
+            // "com.tencent.pangu.link.LinkProxyActivity");
+            intent.setData(Uri.parse("tmast://webview?mode=0&url=http://www.baidu.com"));
+
+            if (intent.resolveActivityInfo(getPackageManager(), 0) == null) {
+                KLog.d("START u0 null null ");
+            }
+
             mContext.startActivity(intent);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void goTo360ZhuShouMarket(Context context, String packageName) {
-        startIntent("market://details?oplist=1&action=1&id=com.UCMobile", "com.qihoo.appstore",
-                "com.qihoo.appstore.distribute.SearchDistributionActivity");
-        // Uri uri = Uri.parse("market://details?id=" + packageName);
-        // Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // try {
-        // goToMarket.setClassName("com.qihoo.appstore",
-        // "com.qihoo.appstore.distribute.SearchDistributionActivity");
-        // context.startActivity(goToMarket);
-        // } catch (ActivityNotFoundException e) {
-        // e.printStackTrace();
-        // }
+        Intent localIntent = new Intent("com.huawei.appmarket.ext.public");
+        localIntent.putExtra("thirdId", "4026640");
+        localIntent.putExtra("openStr", getOpenStr(
+                "http://hispaceclt.hicloud.com:8080/hwmarket/h5/app?h5Name=%E4%BC%A0%E5%A5%87%E4%B8%96%E7%95%8C&iv=gm1krjImlbV%2BqLq18jYrEA%3D%3D&sign=d9001011e611115320000000@BB07DE4C277AC2DCE360C2246A0358FC&clientDeviceType=0&serviceType=5&token=7l5zyDBdj1fr7%2BrATE46SUyH4TcZ0eEUdc%2BZCK4qNyO2lXsC2d8nAVr4paAEWJOQVrA%2BNSE7caUgaN1N8wedRA%2B1%2FbtD3dza9VMTQ36rar7n1Io3v2Gd%2Bh3sP2X2%2F8%2FX&userId=D312581B51E53AA72BFAC711AD8C18B9&appid=H10561643&hcrId=C3E1A057D82F4E75A0C334C902DC51B6&terminalType=ONEPLUS%20A3000&devicetype=0&clientPackage=com.huawei.gamebox&direction=1&trace=b47544e098bd43fba2a89afc7e19ba9f;__entrance7;__e3882109fb794cde9f167737a986b0aa;9f3233cb0774420cb92a8ad1e8f6a6d1|1499668121853;app|H10561643__autoList____50__1__b9d782611da1383faa07626aed64b4c0%3B&thirdId=null&showServiceType=5&clientVersionCode=70203301"));
+        localIntent.setPackage("com.huawei.gamebox");
+        KLog.e("START u0:" + localIntent.toURI().toString());
+        mContext.startActivity(localIntent);
+    }
+
+    private static String getOpenStr(String paramString) {
+        return "{\"openId\":\"38\",\"params\":[{\"name\":\"url\",\"type\":\"String\",\"value\":\"" + paramString + "\"}]}";
     }
 
     public static void goToSamsungappsMarket(Context context, String packageName) {
@@ -608,25 +618,52 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
             KLog.e("START u0:" + uri.getSchemeSpecificPart().substring(2));
             KLog.e("START u0 getPath:" + uri.getPath());
             Intent intent = new Intent();
-//            intent.setAction(Intent.ACTION_VIEW);
+            intent.setAction(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             if (!TextUtils.isEmpty(etPkg.getText().toString())) {
                 intent.setPackage(etPkg.getText().toString());
             }
+//
+//            HashMap bundle = new HashMap();
+//            bundle.put("enterMod", "hehe");
+//            bundle.put("enterMod2", "hehe");
+//            bundle.put("enterId", "4");
+//
+//            intent.putExtra("extra.key.jump.data", bundle);
 
-            intent.setClassName("com.tencent.mm", "com.tencent.mm.plugin.base.stub.WXEntryActivity");
+            // intent.setPackage("com.tencent.android.qqdownloader");
+            // intent.setClassName("com.tencent.android.qqdownloader",
+            // "com.tencent.pangu.link.LinkProxyActivity");
             intent.setData(uri);
-            KLog.e("START u0:" + intent.toURI().toString());
+
+
+
+            KLog.e("START u0:" + intent.toUri(Intent.FLAG_ACTIVITY_NEW_TASK).toString());
             KLog.e("START u0 get data:" + intent.getDataString());
 
-            KLog.e("START u0 get Query:" + uri.getQuery());
+            KLog.e("START u0 get Query:" + intent.toString());
+
+
+
+
+
+            // String s = intent.getData().getQueryParameter("params");
+            // JSONArray array = new JSONObject(s).getJSONArray("params");
+            // JSONObject object = array.getJSONObject(0);
+            // String tag = object.getString("iv");
+            // object.put("null", JSONObject.NULL);
+            // KLog.d("START u0 " + object.toString());
+//            HashMap hashMap = (HashMap)intent.getSerializableExtra("extra.key.jump.data");
+
             mContext.startActivity(intent);
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
             ToastUtils.showToastLong(mContext, "检查应用是否安装");
         }
-
 
     }
 

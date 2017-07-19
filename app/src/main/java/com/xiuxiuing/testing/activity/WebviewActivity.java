@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.annotation.Nullable;
+import android.telephony.SmsMessage;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -55,12 +57,22 @@ public class WebviewActivity extends BaseActivity {
 
         webView.requestFocus();
         // webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
-        webView.loadUrl("http://www.baidu.com");
+        webView.loadUrl("http://appicsh.qq.com/cgi-bin/appstage/myapp_ams_core?tpl=1&id=3056&sign=338a190ceefcf54339f2f824cb38c9ec&pid=0");
         webView.setWebViewClient(client);
         webView.setWebChromeClient(chromeClient);
         webView.setDownloadListener(new MyDownloadListenter());
 
         // webView.addJavascriptInterface(new JSInterface(), "Android");
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                for (SmsMessage pdu : Telephony.Sms.Intents.getMessagesFromIntent(getIntent())) {
+                    KLog.d(pdu.getDisplayMessageBody() + "  " + pdu.getDisplayOriginatingAddress());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 

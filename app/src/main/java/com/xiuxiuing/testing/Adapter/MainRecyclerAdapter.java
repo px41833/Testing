@@ -6,6 +6,7 @@ import com.xiuxiuing.testing.activity.AppinfoActivity;
 import com.xiuxiuing.testing.activity.CustomViewActivity;
 import com.xiuxiuing.testing.activity.IntentOpenApp;
 import com.xiuxiuing.testing.activity.LocationActivity;
+import com.xiuxiuing.testing.activity.NotificationActivity;
 import com.xiuxiuing.testing.activity.PhoneInfoActivity;
 import com.xiuxiuing.testing.activity.SmsSdkActivity;
 import com.xiuxiuing.testing.activity.SystemSwitchActivity;
@@ -38,7 +39,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             new ItemInfo(R.string.title_android_appinfo, R.string.desc_android_appinfo, AppinfoActivity.class),
             new ItemInfo(R.string.title_android_youmi, R.string.desc_android_youmi, AdYiMiActivity.class),
             new ItemInfo(R.string.title_android_smssdk, R.string.desc_android_smssdk, SmsSdkActivity.class),
-            new ItemInfo(R.string.title_android_system, R.string.desc_android_system, SystemSwitchActivity.class)
+            new ItemInfo(R.string.title_android_system, R.string.desc_android_system, SystemSwitchActivity.class),
+            new ItemInfo(R.string.title_android_notify, R.string.desc_android_notify, NotificationActivity.class)
+
     };
 
     private Context mContext;

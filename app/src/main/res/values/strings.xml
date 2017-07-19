@@ -32,6 +32,9 @@
     <string name="title_android_system">系统开关设置</string>
     <string name="desc_android_system">Android 系统开关，wifi、手电筒等的开关</string>
 
+    <string name="title_android_notify">系统通知</string>
+    <string name="desc_android_notify">展示系统通知样式</string>
+
     <string name="title_android_smssdk">SMSSDK</string>
     <string name="desc_android_smssdk">SMSSDK短信验证</string>
 

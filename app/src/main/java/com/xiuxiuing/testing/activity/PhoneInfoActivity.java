@@ -84,6 +84,8 @@ public class PhoneInfoActivity extends BaseActivity {
 
         KLog.d("MAC:" + getMacAddress());
 
+        KLog.d("Build:" + getDeviceInfo());
+
     }
 
     private String getBuild() {

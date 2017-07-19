@@ -1,15 +1,18 @@
 package com.xiuxiuing.testing.activity;
 
+import java.util.Set;
+
+import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.utils.ToastUtils;
+
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
-
-import com.xiuxiuing.testing.R;
-import com.xiuxiuing.testing.utils.ToastUtils;
 
 /**
  * Created by wang on 17/1/23.
@@ -38,6 +41,7 @@ public class SystemSwitchActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.system_screen).setOnClickListener(this);
         findViewById(R.id.system_reboot).setOnClickListener(this);
         findViewById(R.id.system_down).setOnClickListener(this);
+        findViewById(R.id.system_notifi).setOnClickListener(this);
     }
 
     @Override
@@ -78,6 +82,10 @@ public class SystemSwitchActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.system_down:
                 shutDownSwitchUtils();
+                break;
+            case R.id.system_notifi:
+                isNotificationListenerServiceEnabled(mContext);
+                openNotificationAccess();
                 break;
             default:
                 break;
@@ -267,5 +275,17 @@ public class SystemSwitchActivity extends BaseActivity implements View.OnClickLi
         mContext.startActivity(intent);
 
 
+    }
+
+    public void openNotificationAccess() {
+        startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+    }
+
+    public boolean isNotificationListenerServiceEnabled(Context context) {
+        Set<String> pkgs = NotificationManagerCompat.getEnabledListenerPackages(context);
+        if (pkgs.contains(context.getPackageName())) {
+            return true;
+        }
+        return false;
     }
 }

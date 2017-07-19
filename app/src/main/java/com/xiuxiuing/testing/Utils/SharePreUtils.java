@@ -25,6 +25,7 @@ public class SharePreUtils {
     public boolean editStringValue(String key, String value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
+
         return editor.commit();
     }
 

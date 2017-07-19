@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        OneApmAgent.init(this.getApplicationContext()).setToken("F499DCF069732D0314790B17375DDEBC44").start();
+//        OneApmAgent.init(this.getApplicationContext()).setToken("F499DCF069732D0314790B17375DDEBC44").start();
         // IntentFilter filter = new IntentFilter();
         // filter.addAction(Intent.ACTION_SCREEN_OFF);
         // registerReceiver(new TestReceiver(), filter);
