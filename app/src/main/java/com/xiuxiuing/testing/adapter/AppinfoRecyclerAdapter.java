@@ -1,17 +1,24 @@
 package com.xiuxiuing.testing.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.utils.AppinfoUtils;
+import com.xiuxiuing.testing.utils.ToastUtils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,6 +39,7 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
         this.mContext = context;
         PackageManager pm = mContext.getPackageManager();
         List<PackageInfo> packageInfos = pm.getInstalledPackages(0);
+
         for (PackageInfo packageInfo : packageInfos) {
             if (true || (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 AppInfo info = new AppInfo();
@@ -40,11 +48,21 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
                 info.setVersionName(packageInfo.versionName);
                 info.setVersionCode(packageInfo.versionCode);
                 info.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
+                info.setApkPath(packageInfo.applicationInfo.sourceDir);
+                info.setApkSize(new File(info.getApkPath()).length());
+
                 info.setSign(AppinfoUtils.getPkgSignature(mContext, packageInfo.packageName));
                 appInfos.add(info);
             }
 
         }
+
+        Collections.sort(appInfos, new Comparator<AppInfo>() {
+            @Override
+            public int compare(AppInfo appInfo1, AppInfo appInfo2) {
+                return appInfo1.getAppName().compareToIgnoreCase(appInfo2.getAppName());
+            }
+        });
     }
 
     @Override
@@ -65,7 +83,16 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
         holder.cvItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareText(appInfos.get(position).toString());
+                // shareText(appInfos.get(position).toString());
+                shareFile(appInfos.get(position).getApkPath());
+            }
+        });
+
+        holder.cvItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                clipBoard(appInfos.get(position).toString());
+                return true;
             }
         });
     }
@@ -81,6 +108,20 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
         mContext.startActivity(intent);
+    }
+
+    private void shareFile(String path) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
+        intent.setType("application/vnd.android.package-archive");
+        mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.app_name)));
+    }
+
+    private void clipBoard(String text) {
+        ClipboardManager clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(mContext.getString(R.string.app_name), text));
+        ToastUtils.showToastShort(mContext, "复制成功");
     }
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
@@ -109,6 +150,8 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
         private int versionCode;
         private Drawable appIcon;
         private String sign;
+        private String apkPath;
+        private long apkSize;
 
         public String getAppName() {
             return appName;
@@ -158,10 +201,27 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
             this.sign = sign;
         }
 
+        public String getApkPath() {
+            return apkPath;
+        }
+
+        public void setApkPath(String apkPath) {
+            this.apkPath = apkPath;
+        }
+
+        public long getApkSize() {
+            return apkSize;
+        }
+
+        public void setApkSize(long apkSize) {
+            this.apkSize = apkSize;
+        }
+
         @Override
         public String toString() {
-            return "AppInfo{" + "appName='" + appName + '\'' + ", pkgName='" + pkgName + '\'' + ", versionName='" + versionName + '\''
-                    + ", versionCode=" + versionCode + ", sign='" + sign + '\'' + '}';
+            return "AppInfo{\n" + "appName='" + appName + '\'' + ", \npkgName='" + pkgName + '\'' + ", \nversionName='" + versionName + '\''
+                    + ", \nversionCode=" + versionCode + ", \nappIcon=" + appIcon + ", \nsign='" + sign + '\'' + ", \napkPath='" + apkPath + '\''
+                    + ", \napkSize=" + apkSize + '}';
         }
     }
 }
