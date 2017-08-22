@@ -57,7 +57,7 @@ public class WebviewActivity extends BaseActivity {
 
         webView.requestFocus();
         // webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
-        webView.loadUrl("http://appicsh.qq.com/cgi-bin/appstage/myapp_ams_core?tpl=1&id=3056&sign=338a190ceefcf54339f2f824cb38c9ec&pid=0");
+        webView.loadUrl("friendhlshmj://room.hlddz:80");
         webView.setWebViewClient(client);
         webView.setWebChromeClient(chromeClient);
         webView.setDownloadListener(new MyDownloadListenter());

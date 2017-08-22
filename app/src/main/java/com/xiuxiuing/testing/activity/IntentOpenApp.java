@@ -576,11 +576,34 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
     }
 
     public void start360Service() {
+        // Intent intent = new Intent();
+        // intent.setAction("com.getui.gtc.sdk.service.action");
+        // intent.setClassName("com.gysdk.demo", "com.getui.gtc.GtcService");
+        // System.out.println(intent.toURI().toString());
+        // startService(intent);
+
         Intent intent = new Intent();
-        intent.setAction("com.getui.gtc.sdk.service.action");
-        intent.setClassName("com.gysdk.demo", "com.getui.gtc.GtcService");
-        System.out.println(intent.toURI().toString());
-        startService(intent);
+        intent.setAction("cn.ninegame.gamemanager.action.PULLUP");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setPackage("cn.ninegame.gamemanager");
+        // 指定Package，防止拦截/*** Url 参数规则:* 1. 必须符合统跳协议*
+        // 2. target参数必须是url的最后一个参数* 3. 参数中，
+        // 如有Url特殊字符，必须使用 UrlEncoder encode 两次* 4.
+        // 参数中，如有敏感字段需要加密，建议使用AES#encryptToBase64Str和AES#decryptBase64Str
+        // 加解密(目前客户端和SDK的密钥是一致的)，加密后的字符串有可能会有出现Url特殊字符，所以需要执行第三点*/
+        String url = "http://web.9game.cn/share?pageType=browser&target=https%3a%2f%2frender-ant.9game.cn%2fp%2fq%2f3fa23c610%2fportal.html";
+//        String url = "http://web.9game.cn/share?pageType=browser&target=http://u.9game.cn/2bqiraqq";
+        intent.putExtra("request", "url_jump_intent");
+        intent.putExtra("url_jump_url", url);
+//        intent.putExtra("skip_splash", true);
+        // // 是否跳过闪屏， 4.7.6.0 以上支持
+
+//        intent.putExtra("skip_home", false);
+        // 是否跳过首页, 4.7.6.0 以上支持
+        startActivity(intent);
+
     }
 
     public void start360Activity() {
@@ -614,6 +637,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
     public void startIntent() {
         try {
+
             Uri uri = Uri.parse(etUri.getText().toString());
             KLog.e("START u0:" + uri.getSchemeSpecificPart().substring(2));
             KLog.e("START u0 getPath:" + uri.getPath());
@@ -624,17 +648,18 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
             if (!TextUtils.isEmpty(etPkg.getText().toString())) {
                 intent.setPackage(etPkg.getText().toString());
             }
-//
-//            HashMap bundle = new HashMap();
-//            bundle.put("enterMod", "hehe");
-//            bundle.put("enterMod2", "hehe");
-//            bundle.put("enterId", "4");
-//
-//            intent.putExtra("extra.key.jump.data", bundle);
+            //
+            // HashMap bundle = new HashMap();
+            // bundle.put("enterMod", "hehe");
+            // bundle.put("enterMod2", "hehe");
+            // bundle.put("enterId", "4");
+            //
+            // intent.putExtra("extra.key.jump.data", bundle);
 
             // intent.setPackage("com.tencent.android.qqdownloader");
             // intent.setClassName("com.tencent.android.qqdownloader",
             // "com.tencent.pangu.link.LinkProxyActivity");
+
             intent.setData(uri);
 
 
@@ -646,15 +671,13 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
 
 
-
-
             // String s = intent.getData().getQueryParameter("params");
             // JSONArray array = new JSONObject(s).getJSONArray("params");
             // JSONObject object = array.getJSONObject(0);
             // String tag = object.getString("iv");
             // object.put("null", JSONObject.NULL);
             // KLog.d("START u0 " + object.toString());
-//            HashMap hashMap = (HashMap)intent.getSerializableExtra("extra.key.jump.data");
+            // HashMap hashMap = (HashMap)intent.getSerializableExtra("extra.key.jump.data");
 
             mContext.startActivity(intent);
 

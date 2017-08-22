@@ -7,7 +7,6 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.oneapm.agent.android.OneApmAgent;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
 
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-//        OneApmAgent.init(this.getApplicationContext()).setToken("F499DCF069732D0314790B17375DDEBC44").start();
+        // OneApmAgent.init(this.getApplicationContext()).setToken("F499DCF069732D0314790B17375DDEBC44").start();
         // IntentFilter filter = new IntentFilter();
         // filter.addAction(Intent.ACTION_SCREEN_OFF);
         // registerReceiver(new TestReceiver(), filter);
@@ -101,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("msg", "hehehe");
         // intent.setPackage("com.gysdk.demo");
         sendBroadcast(intent);
+
+        System.out.println("null:" + null);
 
         // hello = (TextView) findViewById(R.id.hello);
         //

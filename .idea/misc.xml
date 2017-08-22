@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="EclipseCodeFormatter">
-    <option name="defaultSettings" value="true" />
-    <option name="formatter" value="ECLIPSE" />
-    <option name="id" value="1451552422840" />
-    <option name="name" value="default" />
-    <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../Git/gexin-standard/codestyle/eclipse_formatter/eclipse-java-google-style.xml" />
-    <option name="selectedJavaProfile" value="GoogleStyle" />
-  </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
