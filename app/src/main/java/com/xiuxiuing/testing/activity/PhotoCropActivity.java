@@ -64,16 +64,16 @@ public class PhotoCropActivity extends AppCompatActivity implements CropHandler,
             }
                 break;
             case R.id.bt_crop_gallery: {
-//                mCropParams.enable = false;
-//                mCropParams.compress = false;
-//                mCropParams.crop = "true";
-//                mCropParams.aspectX = 5;
-//                mCropParams.aspectY = 1;
-//                mCropParams.outputX = 480;
-//                mCropParams.outputY = 85;
-//                mCropParams.scale = true;
-//                mCropParams.returnData = true;
-//                Intent intent = CropHelper.buildGalleryIntent(mCropParams);
+                // mCropParams.enable = false;
+                // mCropParams.compress = false;
+                // mCropParams.crop = "true";
+                // mCropParams.aspectX = 5;
+                // mCropParams.aspectY = 1;
+                // mCropParams.outputX = 480;
+                // mCropParams.outputY = 85;
+                // mCropParams.scale = true;
+                // mCropParams.returnData = true;
+                // Intent intent = CropHelper.buildGalleryIntent(mCropParams);
 
 
                 // Intent intent = new Intent("com.android.camera.action.CROP");
@@ -91,53 +91,55 @@ public class PhotoCropActivity extends AppCompatActivity implements CropHandler,
 
 
 
-//                startActivityForResult(intent, CropHelper.REQUEST_CROP);
-               // Intent.ACTION_GET_CONTENT
-                 Intent intent2 = new Intent(Intent.ACTION_PICK, null);
-                 intent2.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                 startActivityForResult(intent2, 1);
+                // startActivityForResult(intent, CropHelper.REQUEST_CROP);
+                // Intent.ACTION_GET_CONTENT
+                Intent intent2 = new Intent(Intent.ACTION_PICK, null);
+                intent2.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent2, 1);
 
 
-//                // 这段代码使用ACTION_GET_CONTENT和ACTION_PICK效果相同
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-//                // Intent intent = new Intent(Intent.ACTION_PICK, null);
-//
-//                // 如果使用com.android.camera.action.CROP 则直接打开裁剪照片的activity 那么可以用自己的图片浏览器选择图片 传入参数并使用之
-//                // Intent intent = new Intent("com.android.camera.action.CROP");
-//
-//                // 如果不设置type，则 ACTION_GET_CONTENT 会弹出异常FATAL EXCEPTION:main android.content.ActivityNotFoundException
-//                // 而 ACTION_PICK 会弹出可用程序列表 但没有打开图片相关的程序（在我的两个设备上是这样）
-//                intent.setType("image/*");
-//
-//                // 设置在开启的Intent中设置显示的view可裁剪
-//                // 这段代码里设置成false也能裁剪啊。。。这是为什么？懂的给我讲讲了
-//                // 这段注释掉就不会跳转到裁剪的activity
-//                intent.putExtra("crop", "true");
-//
-//                // 设置x,y的比例，截图方框就按照这个比例来截 若设置为0,0，或者不设置 则自由比例截图
-//                intent.putExtra("aspectX", 2);
-//                intent.putExtra("aspectY", 1);
-//
-//                // 裁剪区的宽和高 其实就是裁剪后的显示区域 若裁剪的比例不是显示的比例，则自动压缩图片填满显示区域。若设置为0,0 就不显示。若不设置，则按原始大小显示
-//                intent.putExtra("outputX", 200);
-//                intent.putExtra("outputY", 100);
-//
-//                // 不知道有啥用。。可能会保存一个比例值 需要相关文档啊
-//                intent.putExtra("scale", true);
-//
-//                // true的话直接返回bitmap，可能会很占内存 不建议
-//                intent.putExtra("return-data", false);
-//                // 上面设为false的时候将MediaStore.EXTRA_OUTPUT即"output"关联一个Uri
-//
-//                intent.putExtra("output", imageUri);
-//                // 看参数即可知道是输出格式
-//                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-//                // 面部识别 这里用不上
-//                intent.putExtra("noFaceDetection", false);
-//
-//                // 想从Activity中获得返回数据，在启动Activity时候使用startActivityForResult方法
-//                // 1为请求代码，可以是任意值，个人感觉用资源id会比较清楚，而且不会重复 比如当前控件的R.id.button
-//                startActivityForResult(intent, 4);
+                // // 这段代码使用ACTION_GET_CONTENT和ACTION_PICK效果相同
+                // Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+                // // Intent intent = new Intent(Intent.ACTION_PICK, null);
+                //
+                // // 如果使用com.android.camera.action.CROP 则直接打开裁剪照片的activity 那么可以用自己的图片浏览器选择图片
+                // 传入参数并使用之
+                // // Intent intent = new Intent("com.android.camera.action.CROP");
+                //
+                // // 如果不设置type，则 ACTION_GET_CONTENT 会弹出异常FATAL EXCEPTION:main
+                // android.content.ActivityNotFoundException
+                // // 而 ACTION_PICK 会弹出可用程序列表 但没有打开图片相关的程序（在我的两个设备上是这样）
+                // intent.setType("image/*");
+                //
+                // // 设置在开启的Intent中设置显示的view可裁剪
+                // // 这段代码里设置成false也能裁剪啊。。。这是为什么？懂的给我讲讲了
+                // // 这段注释掉就不会跳转到裁剪的activity
+                // intent.putExtra("crop", "true");
+                //
+                // // 设置x,y的比例，截图方框就按照这个比例来截 若设置为0,0，或者不设置 则自由比例截图
+                // intent.putExtra("aspectX", 2);
+                // intent.putExtra("aspectY", 1);
+                //
+                // // 裁剪区的宽和高 其实就是裁剪后的显示区域 若裁剪的比例不是显示的比例，则自动压缩图片填满显示区域。若设置为0,0 就不显示。若不设置，则按原始大小显示
+                // intent.putExtra("outputX", 200);
+                // intent.putExtra("outputY", 100);
+                //
+                // // 不知道有啥用。。可能会保存一个比例值 需要相关文档啊
+                // intent.putExtra("scale", true);
+                //
+                // // true的话直接返回bitmap，可能会很占内存 不建议
+                // intent.putExtra("return-data", false);
+                // // 上面设为false的时候将MediaStore.EXTRA_OUTPUT即"output"关联一个Uri
+                //
+                // intent.putExtra("output", imageUri);
+                // // 看参数即可知道是输出格式
+                // intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+                // // 面部识别 这里用不上
+                // intent.putExtra("noFaceDetection", false);
+                //
+                // // 想从Activity中获得返回数据，在启动Activity时候使用startActivityForResult方法
+                // // 1为请求代码，可以是任意值，个人感觉用资源id会比较清楚，而且不会重复 比如当前控件的R.id.button
+                // startActivityForResult(intent, 4);
 
 
             }
@@ -162,9 +164,9 @@ public class PhotoCropActivity extends AppCompatActivity implements CropHandler,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-//        CropHelper.handleResult(this, requestCode, resultCode, data);
-//        if (requestCode == 1) {
-//            Log.e(TAG, "");
+        // CropHelper.handleResult(this, requestCode, resultCode, data);
+        // if (requestCode == 1) {
+        // Log.e(TAG, "");
 
         switch (requestCode) {
             // 如果是直接从相册获取

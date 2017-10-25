@@ -62,8 +62,7 @@ public class CropFileUtils {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
         }
@@ -97,8 +96,7 @@ public class CropFileUtils {
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
@@ -118,9 +116,7 @@ public class CropFileUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
+                final String[] selectionArgs = new String[] {split[1]};
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
@@ -138,26 +134,22 @@ public class CropFileUtils {
     }
 
     /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
+     * Get the value of the data column for this Uri. This is useful for MediaStore Uris, and other
+     * file-based ContentProviders.
      *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
+     * @param context The context.
+     * @param uri The Uri to query.
+     * @param selection (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         Cursor cursor = null;
         final String column = "_data";
-        final String[] projection = {
-                column
-        };
+        final String[] projection = {column};
 
         try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    >
+    android:background="@android:color/white">
 
     <TextView
         android:layout_width="match_parent"
@@ -14,22 +12,19 @@
         android:padding="10dp"
         android:textSize="16sp"
         android:gravity="center"
-        android:text="Crop"
-        />
+        android:text="Crop" />
 
     <Button
         android:id="@+id/bt_crop_capture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capture from Camera &amp; Crop"
-        />
+        android:text="Capture from Camera &amp; Crop" />
 
     <Button
         android:id="@+id/bt_crop_gallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose from Gallery &amp; Crop"
-        />
+        android:text="Choose from Gallery &amp; Crop" />
 
     <TextView
         android:layout_width="match_parent"
@@ -37,22 +32,19 @@
         android:padding="10dp"
         android:textSize="16sp"
         android:gravity="center"
-        android:text="None Crop"
-        />
+        android:text="None Crop" />
 
     <Button
         android:id="@+id/bt_capture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capture from Camera"
-        />
+        android:text="Capture from Camera" />
 
     <Button
         android:id="@+id/bt_gallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose from Gallery"
-        />
+        android:text="Choose from Gallery" />
 
     <TextView
         android:layout_width="match_parent"
@@ -60,8 +52,7 @@
         android:padding="10dp"
         android:textSize="16sp"
         android:gravity="center"
-        android:text="Result"
-        />
+        android:text="Result" />
 
     <ImageView
         android:id="@+id/image"
@@ -69,6 +60,5 @@
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher"
-        android:background="#f7f8f9"
-        />
+        android:background="#f7f8f9" />
 </LinearLayout>

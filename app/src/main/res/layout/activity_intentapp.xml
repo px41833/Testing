@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/ll_parent"
@@ -14,196 +14,195 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入DeepLink协议"
-            android:text=""/>
+            android:text="" />
 
         <EditText
             android:id="@+id/et_pkg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入要启动应用的包名(选填)"
-            android:text=""/>
+            android:text="" />
 
         <Button
             android:id="@+id/btn_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="start"/>
+            android:text="start" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btn_yingyongbao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="应用宝"/>
+                android:text="应用宝" />
 
             <Button
                 android:id="@+id/btn_jingdong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="京东"/>
+                android:text="京东" />
 
             <Button
                 android:id="@+id/btn_douyu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="斗鱼"/>
+                android:text="斗鱼" />
 
             <Button
                 android:id="@+id/btn_panda"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="熊猫"/>
+                android:text="熊猫" />
 
             <Button
                 android:id="@+id/btn_huya"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="虎牙"/>
+                android:text="虎牙" />
 
             <Button
                 android:id="@+id/btn_longzhu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="龙珠"/>
+                android:text="龙珠" />
 
             <Button
                 android:id="@+id/btn_quanmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="全民"/>
+                android:text="全民" />
 
 
             <Button
                 android:id="@+id/btn_360zhushou"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="360手机助手"/>
+                android:text="360手机助手" />
 
             <Button
                 android:id="@+id/btn_sinagame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="新浪游戏"/>
+                android:text="新浪游戏" />
 
 
             <Button
                 android:id="@+id/btn_getui"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="个推服务"/>
+                android:text="个推服务" />
 
             <Button
                 android:id="@+id/btn_ifeng"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="凤凰新闻"/>
+                android:text="凤凰新闻" />
 
             <Button
                 android:id="@+id/btn_damai"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="大麦网"/>
+                android:text="大麦网" />
 
             <Button
                 android:id="@+id/btn_tuniu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="途牛旅游"/>
+                android:text="途牛旅游" />
 
             <Button
                 android:id="@+id/btn_qqlive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="腾讯视频"/>
+                android:text="腾讯视频" />
 
             <Button
                 android:id="@+id/btn_youku"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="优酷视频"/>
+                android:text="优酷视频" />
 
             <Button
                 android:id="@+id/btn_tudou"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="土豆视频"/>
+                android:text="土豆视频" />
 
             <Button
                 android:id="@+id/btn_souhu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="搜狐视频"/>
+                android:text="搜狐视频" />
 
             <Button
                 android:id="@+id/btn_aiqiyi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="爱奇艺"/>
+                android:text="爱奇艺" />
 
             <Button
                 android:id="@+id/btn_baidu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="百度视频"/>
+                android:text="百度视频" />
 
             <Button
                 android:id="@+id/btn_leshi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="乐视视频"/>
+                android:text="乐视视频" />
 
             <Button
                 android:id="@+id/btn_dianping"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="大众点评"/>
+                android:text="大众点评" />
 
             <Button
                 android:id="@+id/btn_chunqiu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="春秋旅游"/>
+                android:text="春秋旅游" />
 
             <Button
                 android:id="@+id/btn_qunar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="去哪儿旅行"/>
+                android:text="去哪儿旅行" />
 
             <Button
                 android:id="@+id/btn_xiecheng"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="携程旅行"/>
+                android:text="携程旅行" />
 
             <Button
                 android:id="@+id/btn_momo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="陌陌直播"/>
+                android:text="陌陌直播" />
 
             <Button
                 android:id="@+id/btn_huajiao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="花椒直播"/>
+                android:text="花椒直播" />
 
             <Button
                 android:id="@+id/btn_360service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="360Service"/>
+                android:text="360Service" />
 
             <Button
                 android:id="@+id/btn_360activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="360Activity"/>
+                android:text="360Activity" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

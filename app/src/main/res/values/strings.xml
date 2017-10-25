@@ -38,5 +38,8 @@
     <string name="title_android_smssdk">SMSSDK</string>
     <string name="desc_android_smssdk">SMSSDK短信验证</string>
 
+    <string name="title_android_permiss">权限管理</string>
+    <string name="desc_android_permiss">权限管理</string>
+
     <string name="desc">微信红包</string>
 </resources>

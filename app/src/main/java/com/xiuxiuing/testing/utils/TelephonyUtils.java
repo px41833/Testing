@@ -65,7 +65,7 @@ public class TelephonyUtils {
 
     public String getSubscriberId(int subId) {
         String imsi = (String) getPhoneInfo(subId, "getSubscriberId");
-        if(TextUtils.isEmpty(imsi)){
+        if (TextUtils.isEmpty(imsi)) {
             return "2222";
         }
         return imsi;
@@ -123,7 +123,7 @@ public class TelephonyUtils {
 
     public String getSimSerialNumber(int subId) {
         String iccid = (String) getPhoneInfo(subId, "getSimSerialNumber");
-        if(TextUtils.isEmpty(iccid)){
+        if (TextUtils.isEmpty(iccid)) {
             return "2222";
         }
         return iccid;

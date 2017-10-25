@@ -9,6 +9,7 @@ import net.youmi.android.normal.spot.SpotListener;
  */
 public class ClsaaSpotListener implements SpotListener {
     private static final String TAG = "ClsaaSpotListener";
+
     @Override
     public void onShowSuccess() {
         Log.d(TAG, "展示成功");

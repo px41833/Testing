@@ -226,7 +226,7 @@ public class NotificationActivity extends BaseActivity {
             int nid = (int) System.currentTimeMillis() % 1000;
             mNotificationManager.notify(nid + 10001, notification);
             mNotificationManager.notify(nid + 10002, notification1);
-//            mNotificationManager.notify(nid + 10003, notification2);
+            // mNotificationManager.notify(nid + 10003, notification2);
         } else {
             Notification notification = new NotificationCompat.Builder(NotificationActivity.this).setContentTitle("New Message")
                     .setContentText("You've received new messages.").setSmallIcon(R.mipmap.icon).setGroup("分组").setGroupSummary(cbBox.isChecked())

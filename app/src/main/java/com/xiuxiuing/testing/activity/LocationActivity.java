@@ -41,7 +41,7 @@ public class LocationActivity extends BaseActivity {
         KLog.d("sAll: " + sAll);
         KLog.d("mode: " + mode);
 
-        // gps network  gps,network
+        // gps network gps,network
 
         // 判断GPS是否正常启动
         // if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -88,7 +88,7 @@ public class LocationActivity extends BaseActivity {
         // e.printStackTrace();
         // }
 
-         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, -1, -1, locationListener);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, -1, -1, locationListener);
 
 
     }

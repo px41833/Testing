@@ -26,8 +26,7 @@ public class BusLineOverlay extends OverlayManager {
     /**
      * 构造函数
      * 
-     * @param baiduMap
-     *            该BusLineOverlay所引用的 BaiduMap 对象
+     * @param baiduMap 该BusLineOverlay所引用的 BaiduMap 对象
      */
     public BusLineOverlay(BaiduMap baiduMap) {
         super(baiduMap);
@@ -36,8 +35,7 @@ public class BusLineOverlay extends OverlayManager {
     /**
      * 设置公交线数据
      * 
-     * @param result
-     *            公交线路结果数据
+     * @param result 公交线路结果数据
      */
     public void setData(BusLineResult result) {
         this.mBusLineResult = result;
@@ -51,12 +49,8 @@ public class BusLineOverlay extends OverlayManager {
         }
         List<OverlayOptions> overlayOptionses = new ArrayList<OverlayOptions>();
         for (BusLineResult.BusStation station : mBusLineResult.getStations()) {
-            overlayOptionses.add(new MarkerOptions()
-                    .position(station.getLocation())
-                            .zIndex(10)
-                                    .anchor(0.5f, 0.5f)
-                                            .icon(BitmapDescriptorFactory
-                                                    .fromAssetWithDpi("Icon_bus_station.png")));
+            overlayOptionses.add(new MarkerOptions().position(station.getLocation()).zIndex(10).anchor(0.5f, 0.5f)
+                    .icon(BitmapDescriptorFactory.fromAssetWithDpi("Icon_bus_station.png")));
         }
 
         List<LatLng> points = new ArrayList<LatLng>();
@@ -66,10 +60,7 @@ public class BusLineOverlay extends OverlayManager {
             }
         }
         if (points.size() > 0) {
-            overlayOptionses
-                    .add(new PolylineOptions().width(10)
-                            .color(Color.argb(178, 0, 78, 255)).zIndex(0)
-                                    .points(points));
+            overlayOptionses.add(new PolylineOptions().width(10).color(Color.argb(178, 0, 78, 255)).zIndex(0).points(points));
         }
         return overlayOptionses;
     }
@@ -77,15 +68,11 @@ public class BusLineOverlay extends OverlayManager {
     /**
      * 覆写此方法以改变默认点击行为
      * 
-     * @param index
-     *            被点击的站点在
-     *            {@link com.baidu.mapapi.search.busline.BusLineResult#getStations()}
-     *            中的索引
+     * @param index 被点击的站点在 {@link com.baidu.mapapi.search.busline.BusLineResult#getStations()} 中的索引
      * @return 是否处理了该点击事件
      */
     public boolean onBusStationClick(int index) {
-        if (mBusLineResult.getStations() != null
-                && mBusLineResult.getStations().get(index) != null) {
+        if (mBusLineResult.getStations() != null && mBusLineResult.getStations().get(index) != null) {
             Log.i("baidumapsdk", "BusLineOverlay onBusStationClick");
         }
         return false;
@@ -97,7 +84,7 @@ public class BusLineOverlay extends OverlayManager {
         } else {
             return false;
         }
-        
+
     }
 
     @Override

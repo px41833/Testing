@@ -13,11 +13,11 @@ public class PasswordGetter {
 
     private BufferedReader br;
 
-    public PasswordGetter(InputStream in){
+    public PasswordGetter(InputStream in) {
         br = new BufferedReader(new InputStreamReader(in));
     }
 
-    public void reSet(InputStream in){
+    public void reSet(InputStream in) {
         try {
             br.close();
             br = new BufferedReader(new InputStreamReader(in));
@@ -27,7 +27,7 @@ public class PasswordGetter {
         }
     }
 
-    public String getPassword(){
+    public String getPassword() {
         try {
             password = br.readLine();
             System.out.println("test password:" + password);
@@ -38,7 +38,7 @@ public class PasswordGetter {
         return password;
     }
 
-    public void Clean(){
+    public void Clean() {
         try {
             br.close();
         } catch (IOException e) {

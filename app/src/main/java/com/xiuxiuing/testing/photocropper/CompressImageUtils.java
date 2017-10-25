@@ -5,18 +5,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created with Android Studio.
- * User: ryan@xisue.com
- * Date: 11/24/14
- * Time: 2:20 PM
- * Desc: CompressImageUtils
+ * Created with Android Studio. User: ryan@xisue.com Date: 11/24/14 Time: 2:20 PM Desc:
+ * CompressImageUtils
  */
 public class CompressImageUtils {
 
@@ -30,8 +26,7 @@ public class CompressImageUtils {
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(originUri.getPath(), options);
             // Calculate inSampleSize
-            int minSideLength = cropParams.compressWidth > cropParams.compressHeight
-                    ? cropParams.compressHeight : cropParams.compressWidth;
+            int minSideLength = cropParams.compressWidth > cropParams.compressHeight ? cropParams.compressHeight : cropParams.compressWidth;
             options.inSampleSize = computeSampleSize(options, minSideLength, cropParams.compressWidth * cropParams.compressHeight);
             // Decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false;

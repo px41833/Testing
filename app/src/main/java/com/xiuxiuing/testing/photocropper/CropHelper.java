@@ -10,31 +10,24 @@ import android.util.Log;
 
 import com.xiuxiuing.testing.activity.PhotoCropActivity;
 
-
 import java.io.File;
 
 /**
- * Created with Android Studio.
- * User: ryan@xisue.com
- * Date: 10/1/14
- * Time: 11:08 AM
- * Desc: CropHelper
- * Revision:
- * - 10:00 2014/10/03 Basic utils.
- * - 11:30 2014/10/03 Add static methods for generating crop intents.
- * - 15:00 2014/10/03 Finish the logic of handling crop intents.
- * - 12:20 2014/10/04 Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small.
- * - 16:30 2015/05/22 Fixed the error that crop from gallery doest work on some Kitkat devices.
- * - 23:30 2015/08/20 Add support to pick or capture photo without crop.
- * - 23:00 2015/09/05 Add compress features.
+ * Created with Android Studio. User: ryan@xisue.com Date: 10/1/14 Time: 11:08 AM Desc: CropHelper
+ * Revision: - 10:00 2014/10/03 Basic utils. - 11:30 2014/10/03 Add static methods for generating
+ * crop intents. - 15:00 2014/10/03 Finish the logic of handling crop intents. - 12:20 2014/10/04
+ * Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small. -
+ * 16:30 2015/05/22 Fixed the error that crop from gallery doest work on some Kitkat devices. -
+ * 23:30 2015/08/20 Add support to pick or capture photo without crop. - 23:00 2015/09/05 Add
+ * compress features.
  */
 public class CropHelper {
 
     public static final String TAG = "CropHelper";
 
     /**
-     * request code of Activities or Fragments
-     * You will have to change the values of the request codes below if they conflict with your own.
+     * request code of Activities or Fragments You will have to change the values of the request
+     * codes below if they conflict with your own.
      */
     public static final int REQUEST_CROP = 127;
     public static final int REQUEST_CAMERA = 128;
@@ -53,11 +46,7 @@ public class CropHelper {
             }
         }
         String name = String.format("image-%d.jpg", System.currentTimeMillis());
-        return Uri
-                .fromFile(cacheFolder)
-                .buildUpon()
-                .appendPath(name)
-                .build();
+        return Uri.fromFile(cacheFolder).buildUpon().appendPath(name).build();
     }
 
     public static boolean isPhotoReallyCropped(Uri uri) {
@@ -67,7 +56,8 @@ public class CropHelper {
     }
 
     public static void handleResult(PhotoCropActivity handler, int requestCode, int resultCode, Intent data) {
-        if (handler == null) return;
+        if (handler == null)
+            return;
 
         if (false && resultCode == Activity.RESULT_CANCELED) {
             handler.onCancel();
@@ -134,16 +124,13 @@ public class CropHelper {
         if (params.enable) {
             intent = buildCropIntent(Intent.ACTION_GET_CONTENT, params);
         } else {
-            intent = new Intent(Intent.ACTION_GET_CONTENT)
-                    .setType("image/*")
-                    .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+            intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*").putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
         }
         return intent;
     }
 
     public static Intent buildCameraIntent(CropParams params) {
-        return new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+        return new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
     }
 
     // Crop Intents
@@ -153,18 +140,10 @@ public class CropHelper {
     }
 
     private static Intent buildCropIntent(String action, CropParams params) {
-        return new Intent(action)
-                .setDataAndType(params.uri, params.type)
-                .putExtra("crop", "true")
-                .putExtra("scale", params.scale)
-                .putExtra("aspectX", params.aspectX)
-                .putExtra("aspectY", params.aspectY)
-                .putExtra("outputX", params.outputX)
-                .putExtra("outputY", params.outputY)
-                .putExtra("return-data", params.returnData)
-                .putExtra("outputFormat", params.outputFormat)
-                .putExtra("noFaceDetection", params.noFaceDetection)
-                .putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded)
+        return new Intent(action).setDataAndType(params.uri, params.type).putExtra("crop", "true").putExtra("scale", params.scale)
+                .putExtra("aspectX", params.aspectX).putExtra("aspectY", params.aspectY).putExtra("outputX", params.outputX)
+                .putExtra("outputY", params.outputY).putExtra("return-data", params.returnData).putExtra("outputFormat", params.outputFormat)
+                .putExtra("noFaceDetection", params.noFaceDetection).putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded)
                 .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
     }
 
@@ -183,7 +162,8 @@ public class CropHelper {
     }
 
     public static boolean clearCachedCropFile(Uri uri) {
-        if (uri == null) return false;
+        if (uri == null)
+            return false;
 
         File file = new File(uri.getPath());
         if (file.exists()) {

@@ -5,19 +5,23 @@ import java.lang.reflect.Field;
 
 import com.socks.library.KLog;
 import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.utils.ToastUtils;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.telephony.SmsMessage;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -32,7 +36,7 @@ import android.widget.ZoomButtonsController;
  */
 public class WebviewActivity extends BaseActivity {
     WebView webView;
-    WebSettings settings;
+    // WebSettings settings;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -40,43 +44,71 @@ public class WebviewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = (WebView) findViewById(R.id.webview);
-        settings = webView.getSettings();
+        WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        settings.setSupportZoom(true);
-        settings.setBuiltInZoomControls(true);
-        // 不显示webview缩放按钮
+        settings.setDomStorageEnabled(true);
         settings.setDisplayZoomControls(false);
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            settings.setLoadsImagesAutomatically(true);
-        } else {
-            settings.setLoadsImagesAutomatically(false);
-        }
-
         webView.requestFocus();
+
+        // settings.setSupportZoom(true);
+        // settings.setBuiltInZoomControls(true);
+        // 不显示webview缩放按钮
+
+
+        // if (Build.VERSION.SDK_INT >= 19) {
+        // settings.setLoadsImagesAutomatically(true);
+        // } else {
+        // settings.setLoadsImagesAutomatically(false);
+        // }
+
         // webView.loadUrl("file:///android_asset/html/JavaAndJavaScriptCall.html");
-        webView.loadUrl("friendhlshmj://room.hlddz:80");
+        webView.loadUrl(
+                "https://qcs.meituan.com/c/fe/activityCoupon?param=0f33385ea3bee4d035aea28abdec662b");
         webView.setWebViewClient(client);
-        webView.setWebChromeClient(chromeClient);
-        webView.setDownloadListener(new MyDownloadListenter());
+        // webView.setWebChromeClient(chromeClient);
+        // webView.setDownloadListener(new MyDownloadListenter());
+
+        // String ua = "";
+        // try {
+        // if (Build.VERSION.SDK_INT > 16) {
+        // ua = WebSettings.getDefaultUserAgent(this);
+        // } else {
+        // WebView webview;
+        // webview = new WebView(this);
+        // // webview.layout(0, 0, 0, 0);
+        // WebSettings settings = webview.getSettings();
+        // settings.setJavaScriptEnabled(true);
+        // ua = settings.getUserAgentString();
+        // // ua = new
+        // // WebView(WKManager.getIns().getContext()).getSettings().getUserAgentString();
+        // }
+        //
+        // } catch (Throwable t) {
+        // } finally {
+        // ToastUtils.showToastShort(this, "ua:" + ua);
+        // }
 
         // webView.addJavascriptInterface(new JSInterface(), "Android");
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                for (SmsMessage pdu : Telephony.Sms.Intents.getMessagesFromIntent(getIntent())) {
-                    KLog.d(pdu.getDisplayMessageBody() + "  " + pdu.getDisplayOriginatingAddress());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // try {
+        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // for (SmsMessage pdu : Telephony.Sms.Intents.getMessagesFromIntent(getIntent())) {
+        // KLog.d(pdu.getDisplayMessageBody() + " " + pdu.getDisplayOriginatingAddress());
+        // }
+        // }
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
 
 
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // webView.loadUrl("https://s.wcd.im/v/2bdalZ39");
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -97,35 +129,7 @@ public class WebviewActivity extends BaseActivity {
     }
 
     WebViewClient client = new WebViewClient() {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            KLog.d("url:" + url);
-            return super.shouldOverrideUrlLoading(view, url);
-        }
 
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            WebResourceResponse response = null;
-            if (request.getUrl().toString().contains("logo")) {
-                try {
-                    InputStream logo = getAssets().open("image/icon.png");
-                    response = new WebResourceResponse("image/png", "UTF-8", logo);
-                } catch (Exception e) {
-
-                }
-            }
-            return response;
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            if (!view.getSettings().getLoadsImagesAutomatically()) {
-                view.getSettings().setLoadsImagesAutomatically(true);
-            }
-
-            webView.loadUrl("javascript:javaCallJs('加载完成!!!')");
-
-        }
     };
 
     class JSInterface {

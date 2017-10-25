@@ -6,7 +6,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
 
@@ -35,7 +34,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private FirebaseAnalytics mFirebaseAnalytics;
     TextView hello = null;
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -63,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         // Intent intent = new Intent(this, MainService.class);
         // startService(intent);
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_main);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE}, 0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,11 +74,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         mRecyclerView.setAdapter(new MainRecyclerAdapter());
 
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Main onCreate");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.main_navigation);
         if (navigationView != null) {

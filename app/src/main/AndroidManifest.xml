@@ -1,141 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.xiuxiuing.testing"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.xiuxiuing.testing">
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true"/>
+        android:required="true" />
 
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 
     <!-- 如果使用积分墙广告,还需要配置下面权限 -->
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions"/>
+        tools:ignore="ProtectedPermissions" />
 
     <!-- 以下为可选权限 -->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     //授予应用程序访问系统开机事件的权限
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 
     <application
-        android:name=".activity.MyApp"
+        android:name="com.xiuxiuing.testing.activity.MyApp"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme.NoActionBar"
-        >
+        android:theme="@style/AppTheme.NoActionBar">
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="UiFlLdv14XpAb4xp0htKCcbjGxmbfgej"/>
+            android:value="UiFlLdv14XpAb4xp0htKCcbjGxmbfgej" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote"></service>
 
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name"
-            >
+            android:name="com.xiuxiuing.testing.activity.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.BaseActivity"/>
-        <activity android:name=".activity.WifiManagerActivity"/>
-        <activity android:name=".activity.WiFiSdkActivity"/>
-        <activity android:name=".activity.LocationActivity"/>
+        <activity android:name="com.xiuxiuing.testing.activity.BaseActivity" />
+        <activity android:name="com.xiuxiuing.testing.activity.WifiManagerActivity" />
+        <activity android:name=".activity.WiFiSdkActivity" />
+        <activity android:name=".activity.LocationActivity" />
         <activity android:name=".activity.WebviewActivity">
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PhoneInfoActivity"/>
+        <activity android:name=".activity.PhoneInfoActivity" />
         <activity android:name=".activity.IntentOpenApp">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CustomViewActivity"/>
-        <activity android:name=".activity.AppinfoActivity"/>
-        <activity android:name=".activity.AdYiMiActivity"/>
-        <activity android:name=".activity.SystemSwitchActivity"/>
-        <activity android:name=".activity.SmsSdkActivity"/>
-        <activity android:name=".activity.NotificationActivity"/>
+        <activity android:name=".activity.CustomViewActivity" />
+        <activity android:name=".activity.AppinfoActivity" />
+        <activity android:name=".activity.AdYiMiActivity" />
+        <activity android:name=".activity.SystemSwitchActivity" />
+        <activity android:name=".activity.SmsSdkActivity" />
+        <activity android:name=".activity.NotificationActivity" />
+        <activity android:name=".activity.PermissionManagerActivity" />
 
-        <service android:name=".service.WifiService"/>
-        <service android:name=".service.MainService"/>
+        <service android:name=".service.WifiService" />
+        <service android:name=".service.MainService" />
 
         <service
             android:name=".service.NotifiListenerService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService"/>
+                <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
 
         <receiver android:name="com.xiuxiuing.testing.receiver.StaticReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
-                <action android:name="android.net.wifi.STATE_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.SCREEN_ON"/>
-                <action android:name="android.intent.action.SCREEN_OFF"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
 
-                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
 
-                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
 
 
         <service
             android:name=".service.RedMoneyService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService"/>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility"/>
+                android:resource="@xml/accessibility" />
         </service>
 
 

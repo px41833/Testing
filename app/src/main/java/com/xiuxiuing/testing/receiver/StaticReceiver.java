@@ -91,7 +91,7 @@ public class StaticReceiver extends BroadcastReceiver {
             }
         }
 
-        if (action.equals(Intent.ACTION_SCREEN_OFF)){
+        if (action.equals(Intent.ACTION_SCREEN_OFF)) {
             KLog.d("hei ping le");
         }
     }

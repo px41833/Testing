@@ -19,6 +19,8 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +37,9 @@ import android.widget.TextView;
 public class PhoneInfoActivity extends BaseActivity {
     TextView tvPhone;
 
+    public static String PREFERRED_APN_URI = "content://telephony/carriers/preferapn";
+
+    @TargetApi(Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,21 @@ public class PhoneInfoActivity extends BaseActivity {
         tvPhone = (TextView) findViewById(R.id.phoneifno);
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         TelephonyUtils telephonyUtils = new TelephonyUtils(this);
+
+        SubscriptionManager subManager = SubscriptionManager.from(this.getApplicationContext());
+        List list = subManager.getActiveSubscriptionInfoList();
+
+        String imei1 = tm.getImei(0);
+        String imei2 = tm.getImei(1);
+        // String meid1 = tm.getMeid(0);
+        // String meid2 = tm.getMeid(1);
+
+        int simState1 = tm.getSimState(0);
+        int simState2 = tm.getSimState(1);
+        NetworkInfo networkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        String type = networkInfo.getSubtypeName();
+        int nettype = networkInfo.getSubtype();
+        KLog.d("type:" + type + " nettype:" + nettype);
 
         StringBuilder sb = new StringBuilder();
         StringBuilder sbString = new StringBuilder();
@@ -96,6 +116,56 @@ public class PhoneInfoActivity extends BaseActivity {
 
         return sb.toString();
     }
+
+    public String getCurrentApnInUse(Context context) {
+        Cursor cursor = context.getContentResolver().query(Uri.parse(PREFERRED_APN_URI), null, null, null, null);
+        cursor.moveToFirst();
+        String apn = "";
+        if (cursor.isAfterLast()) {
+            apn = cursor.getString(3);
+            if (apn == null) {
+                apn = "";
+            }
+        }
+        return apn;
+    }
+
+    // 获取Mobile网络下的cmwap、cmnet
+    // private int getCurrentApnInUse(Context context) {
+    // int type = NONET;
+    // Cursor cursor = context.getContentResolver().query(Uri.parse(PREFERRED_APN_URI), new String[]
+    // {"_id", "apn", "type"}, null, null, null);
+    // cursor.moveToFirst();
+    // int counts = cursor.getCount();
+    // if (counts != 0) {// 适配平板外挂3G模块情况
+    // if (!cursor.isAfterLast()) {
+    // String apn = cursor.getString(1);
+    // // #777、ctnet 都是中国电信定制机接入点名称,中国电信的接入点：Net、Wap都采用Net即非代理方式联网即可
+    // // internet 是模拟器上模拟接入点名称
+    // if (apn.equalsIgnoreCase("cmnet") || apn.equalsIgnoreCase("3gnet") ||
+    // apn.equalsIgnoreCase("uninet") || apn.equalsIgnoreCase("#777")
+    // || apn.equalsIgnoreCase("ctnet") || apn.equalsIgnoreCase("internet")) {
+    // type = WIFIAndCMNET;
+    // } else if (apn.equalsIgnoreCase("cmwap") || apn.equalsIgnoreCase("3gwap") ||
+    // apn.equalsIgnoreCase("uniwap")) {
+    // type = CMWAP;
+    // }
+    // } else {
+    // // 适配中国电信定制机,如海信EG968,上面方式获取的cursor为空，所以换种方式
+    // Cursor c = context.getContentResolver().query(PREFERRED_APN_URI, null, null, null, null);
+    // c.moveToFirst();
+    // String user = c.getString(c.getColumnIndex("user"));
+    // if (user.equalsIgnoreCase("ctnet")) {
+    // type = WIFIAndCMNET;
+    // }
+    // c.close();
+    // }
+    // } else {
+    // type = WIFIAndCMNET;// 平板外挂3G,采用非代理方式上网
+    // }
+    // cursor.close();
+    // return type;
+    // }
 
     /**
      * 获取指定字段信息
