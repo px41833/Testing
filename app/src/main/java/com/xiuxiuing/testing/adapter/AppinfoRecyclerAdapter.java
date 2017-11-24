@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.socks.library.KLog;
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.utils.AppinfoUtils;
 import com.xiuxiuing.testing.utils.ToastUtils;
@@ -38,7 +39,7 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
     public AppinfoRecyclerAdapter(Context context) {
         this.mContext = context;
         PackageManager pm = mContext.getPackageManager();
-        List<PackageInfo> packageInfos = pm.getInstalledPackages(0);
+        List<PackageInfo> packageInfos = pm.getInstalledPackages(PackageManager.GET_SIGNATURES);
 
         for (PackageInfo packageInfo : packageInfos) {
             if (true || (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
@@ -50,8 +51,8 @@ public class AppinfoRecyclerAdapter extends RecyclerView.Adapter<AppinfoRecycler
                 info.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
                 info.setApkPath(packageInfo.applicationInfo.sourceDir);
                 info.setApkSize(new File(info.getApkPath()).length());
-
-                info.setSign(AppinfoUtils.getPkgSignature(mContext, packageInfo.packageName));
+                KLog.d(packageInfo.packageName + ":" + AppinfoUtils.getPkgSignature(packageInfo.signatures));
+                info.setSign(AppinfoUtils.getPkgSignature(packageInfo.signatures));
                 appInfos.add(info);
             }
 

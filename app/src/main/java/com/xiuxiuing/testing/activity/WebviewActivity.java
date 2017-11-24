@@ -47,6 +47,9 @@ public class WebviewActivity extends BaseActivity {
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         settings.setDisplayZoomControls(false);
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);

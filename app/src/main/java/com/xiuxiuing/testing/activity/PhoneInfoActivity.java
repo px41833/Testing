@@ -6,13 +6,20 @@ import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.NetworkInterface;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.socks.library.KLog;
 import com.xiuxiuing.testing.R;
+import com.xiuxiuing.testing.utils.ReflectionUtils;
 import com.xiuxiuing.testing.utils.TelephonyUtils;
 
 import android.annotation.TargetApi;
@@ -24,6 +31,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -39,7 +47,6 @@ public class PhoneInfoActivity extends BaseActivity {
 
     public static String PREFERRED_APN_URI = "content://telephony/carriers/preferapn";
 
-    @TargetApi(Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +55,35 @@ public class PhoneInfoActivity extends BaseActivity {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         TelephonyUtils telephonyUtils = new TelephonyUtils(this);
 
-        SubscriptionManager subManager = SubscriptionManager.from(this.getApplicationContext());
-        List list = subManager.getActiveSubscriptionInfoList();
+
+        String op = tm.getSimOperator();
+        KLog.d("network:" + tm.getNetworkOperatorName());
+
+        KLog.d("name:" + tm.getSimOperatorName() + " op:" + op);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            final SubscriptionManager subManager = SubscriptionManager.from(this.getApplicationContext());
+
+            SubscriptionManager.OnSubscriptionsChangedListener listener = new SubscriptionManager.OnSubscriptionsChangedListener() {
+                @Override
+                public void onSubscriptionsChanged() {
+                    super.onSubscriptionsChanged();
+                    KLog.d("onSubscriptionsChanged");
+                }
+            };
+
+            subManager.addOnSubscriptionsChangedListener(listener);
+
+            SubscriptionInfo subscriptionInfo =
+                    (SubscriptionInfo) ReflectionUtils.invokeMethod(subManager, "getDefaultDataSubscriptionInfo", null, null);
+            KLog.d("ssslot:" + subscriptionInfo.getSimSlotIndex() + " number：" + subscriptionInfo.getNumber());
+            List<SubscriptionInfo> list = subManager.getActiveSubscriptionInfoList();
+            for (SubscriptionInfo info : list) {
+                KLog.d("slot:" + info.getSimSlotIndex() + " number：" + info.getNumber());
+            }
+        }
+
+
 
         String imei1 = tm.getImei(0);
         String imei2 = tm.getImei(1);
@@ -105,6 +139,8 @@ public class PhoneInfoActivity extends BaseActivity {
         KLog.d("MAC:" + getMacAddress());
 
         KLog.d("Build:" + getDeviceInfo());
+
+        // getMobileKey(this);
 
     }
 
@@ -597,4 +633,163 @@ public class PhoneInfoActivity extends BaseActivity {
         }
         return "02:00:00:00:00:00";
     }
+
+    public static boolean r(Context paramContext) {
+        try {
+            ConnectivityManager localConnectivityManager =
+                    (ConnectivityManager) paramContext.getApplicationContext().getSystemService("connectivity");
+            NetworkInfo localNetworkInfo = localConnectivityManager.getActiveNetworkInfo();
+            if ((localNetworkInfo != null) && (localNetworkInfo.isConnected())) {
+                String str = localNetworkInfo.getTypeName();
+                if (str.equalsIgnoreCase("MOBILE")) {
+                    return true;
+                }
+            }
+        } catch (Exception localException) {
+        }
+        return false;
+    }
+
+    public static String c(Context paramContext) {
+        String str1 = "";
+        try {
+            TelephonyManager localTelephonyManager = (TelephonyManager) paramContext.getApplicationContext().getSystemService("phone");
+            if (localTelephonyManager != null) {
+                String str2 = localTelephonyManager.getSubscriberId();
+                if (str2 != null) {
+                    str1 = str2.trim();
+                }
+            }
+        } catch (Exception localException) {
+            str1 = "";
+        }
+        return str1;
+    }
+
+    public static String a(Context paramContext) {
+        String str = "";
+        try {
+            TelephonyManager localTelephonyManager = (TelephonyManager) paramContext.getSystemService("phone");
+
+            str = localTelephonyManager.getDeviceId();
+        } catch (Exception localException) {
+            str = "";
+        }
+        return str;
+    }
+
+    public static String t(Context paramContext) {
+        TelephonyManager localTelephonyManager = (TelephonyManager) paramContext.getApplicationContext().getSystemService("phone");
+        int i = Settings.System.getInt(paramContext.getApplicationContext().getContentResolver(), "airplane_mode_on", 0);
+        if (i == 1) {
+            return "0";
+        }
+        String str = localTelephonyManager.getSimOperator();
+        if ((str.equals("46000")) || (str.equals("46002")) || (str.equals("46007"))) {
+            return "1";
+        }
+        if ("46001".equals(str)) {
+            return "2";
+        }
+        if ("46003".equals(str)) {
+            return "3";
+        }
+        return "0";
+    }
+
+    public static String i() {
+        String str = UUID.randomUUID().toString();
+        return str.replaceAll("-", "");
+    }
+
+    public static String j() {
+        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        return localSimpleDateFormat.format(new Date());
+    }
+
+    public static final String a(String paramString) {
+        try {
+            MessageDigest localMessageDigest = MessageDigest.getInstance("MD5");
+            byte[] arrayOfByte1 = paramString.getBytes();
+            byte[] arrayOfByte2 = localMessageDigest.digest(arrayOfByte1);
+            StringBuilder localStringBuilder = new StringBuilder();
+            int i = arrayOfByte2.length;
+            for (int j = 0; j < i; j++) {
+                if (Integer.toHexString(0xFF & arrayOfByte2[j]).length() == 1) {
+                    localStringBuilder.append("0").append(Integer.toHexString(0xFF & arrayOfByte2[j]));
+                } else {
+                    localStringBuilder.append(Integer.toHexString(0xFF & arrayOfByte2[j]));
+                }
+            }
+            return localStringBuilder.toString();
+        } catch (NoSuchAlgorithmException localNoSuchAlgorithmException) {
+            localNoSuchAlgorithmException.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void getMobileKey(Context paramContext) {
+        KLog.d("MobileAgent", "getMobileKey");
+        if (true) {
+            String str1 = "2.0";
+            String str2 = "999";
+            String str3 = "300008334557";
+
+            String str4 = "1.0";
+            String str5 = "umcsdk_outer_1.4.3.5";
+            String str6 = "1";
+            String str7 = c(paramContext);
+            String str8 = a(paramContext);
+            String str9 = Build.BRAND;
+            String str10 = Build.MODEL;
+            String str11 = "android" + Build.VERSION.RELEASE;
+            String str12 = "0";
+            String str13 = t(paramContext);
+            String str14 = i();
+            String str15 = j();
+            try {
+                StringBuilder localStringBuilder = new StringBuilder();
+                localStringBuilder.append("http://www.cmpassport.com/openapi/getmobilekey?");
+                localStringBuilder.append("ver=");
+                localStringBuilder.append(str1);
+                localStringBuilder.append("&sourceid=");
+                localStringBuilder.append(str2);
+                localStringBuilder.append("&appid=");
+                localStringBuilder.append(str3);
+                localStringBuilder.append("&clientver=");
+                localStringBuilder.append(str4);
+                localStringBuilder.append("&sdkver=");
+                localStringBuilder.append(str5);
+                localStringBuilder.append("&authtype=");
+                localStringBuilder.append(str6);
+                localStringBuilder.append("&imsi=");
+                localStringBuilder.append(str7);
+                localStringBuilder.append("&imei=");
+                localStringBuilder.append(str8);
+                localStringBuilder.append("&mobilebrand=");
+                localStringBuilder.append(URLEncoder.encode(str9, "UTF-8"));
+                localStringBuilder.append("&mobilemodel=");
+                localStringBuilder.append(URLEncoder.encode(str10, "UTF-8"));
+                localStringBuilder.append("&mobilesystem=");
+                localStringBuilder.append(URLEncoder.encode(str11, "UTF-8"));
+                localStringBuilder.append("&clienttype=");
+                localStringBuilder.append(str12);
+                localStringBuilder.append("&operatortype=");
+                localStringBuilder.append(str13);
+                localStringBuilder.append("&unikey=");
+                localStringBuilder.append(str14);
+                localStringBuilder.append("&timestamp=");
+                localStringBuilder.append(str15);
+                localStringBuilder.append("&code=");
+                localStringBuilder.append(
+                        a(str1 + str2 + str3 + str4 + str5 + str6 + str7 + str8 + str9 + str10 + str11 + str12 + str13 + str14 + str15 + "12345678")
+                                .toUpperCase());
+
+                KLog.d(localStringBuilder.toString());
+            } catch (Exception localException) {
+                localException.printStackTrace();
+            }
+        }
+    }
+
 }

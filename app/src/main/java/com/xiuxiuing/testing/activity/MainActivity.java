@@ -8,6 +8,7 @@ import java.util.Enumeration;
 
 import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.adapter.MainRecyclerAdapter;
+import com.xiuxiuing.testing.utils.UmcSdkUtils;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Intent intent = new Intent(this, MainService.class);
         // startService(intent);
+
+//        UmcSdkUtils.requestNetwork(MainActivity.this);
 
         setContentView(R.layout.activity_main);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE}, 0);

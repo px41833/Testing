@@ -5,6 +5,7 @@ import com.xiuxiuing.testing.R;
 import com.xiuxiuing.testing.utils.ToastUtils;
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -56,7 +57,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
             case R.id.btn_start:
                 startIntent();
                 break;
-           
+
             default:
                 break;
         }
@@ -96,44 +97,17 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void startIntent() {
         try {
 
-            Uri uri = Uri.parse(etUri.getText().toString());
+            String url = etUri.getText().toString();
+            if (url.contains("end")) {
+                Intent intent = Intent.parseUri(url,0);
+                mContext.startActivity(intent);
+                return;
+            }
+
+            Uri uri = Uri.parse(url);
             KLog.e("START u0:" + uri.getSchemeSpecificPart().substring(2));
             KLog.e("START u0 getPath:" + uri.getPath());
             Intent intent = new Intent();
@@ -144,7 +118,11 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
                 intent.setPackage(etPkg.getText().toString());
             }
 
-            int a = Intent.FLAG_ACTIVITY_NEW_TASK & 0x100000;
+            ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+            // cm.setText("【现在加入我的战队，一起瓜分4000万天猫双11大红I包!】http://t.oihlb.com/h.F6H86i
+            // 点击链接，再选择浏览器打开；或复制这条信息￥K9PM0grY20A￥后打开\uD83D\uDC49手淘\uD83D\uDC48");
+
+            // int a = Intent.FLAG_ACTIVITY_NEW_TASK & 0x100000;
             //
             // HashMap bundle = new HashMap();
             // bundle.put("enterMod", "hehe");
@@ -171,6 +149,7 @@ public class IntentOpenApp extends BaseActivity implements View.OnClickListener 
 
 
             mContext.startActivity(intent);
+
 
 
 
